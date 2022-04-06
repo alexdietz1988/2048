@@ -1,0 +1,27 @@
+* {
+    box-sizing: border-box;
+}
+
+div {
+    transition: 0.5s;
+}
+
+.gameboard {
+    font-size: 0;
+    width: 402px;
+    border: 1px solid black;
+}
+
+.num {
+    display: inline-block;
+    border: 1px solid black;
+    height: 100px;
+    width: 100px;
+}
+
+.piece {
+    background-color: purple;
+    position: relative;
+    top: 100px;
+    left: 200px;
+}

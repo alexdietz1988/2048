@@ -1,8 +1,24 @@
 // ### Initializing the gameboard
-// 1. In my HTML and CSS, I'll create divs for the gameboard itself and its sixteen squares and give them appropriate size/position/borders.
-// 2. In my JavaScript, I'll create an array of four arrays (for each row) to represent the values of the pieces at each square on the gameboard. (So e.g. if there is one 2 at the end of the first row, the first sub-array should be set to [0,0,0,2].)
+
+// An array representing the values of pieces at each square on the gameboard.
+let gameArray = [
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+]
+
+
+
 // 3. I'll create a function to randomly choose open squares for new pieces to be located, using the gameboard array.
 // 4. I'll create a function to take an index on the gameboard array and give an element the appropriate location on the actual gameboard using CSS.
+
+$('.num1').click( () => {
+    // $('.num1').css( {'transform': 'translate(-100px, 100px)'})
+    $('.num1').css( {'left': '0px', 'top': '0px'} )
+    }
+)
+
 // 5. I'll create a function to generate new pieces using the functions in (3) and (4), and call it twice to generate the first two pieces.
 
 // ### Moving pieces
