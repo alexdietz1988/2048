@@ -78,6 +78,8 @@ function pieceAtPosition(row, column) {
     return mysteryPiece
 }
 
+
+
 function moveLeft() {
 
     let pieceToMove;
@@ -87,8 +89,6 @@ function moveLeft() {
 
             if (gameArray[i][j] > 0) { // Find the leftmost piece
                 pieceToMove = pieceAtPosition(i, j)
-                console.log(pieceToMove.style.top)
-                console.log(pieceToMove.style.left)
 
                 let lookingForWhereToGo = true;
                 let k = 1;
@@ -99,13 +99,14 @@ function moveLeft() {
                         
                         if (gameArray[i][j - k] === gameArray[i][j]) {
                             positionPiece(pieceToMove, i, j - k) // Move to that position if same value
-                            console.log(`New position: [${i}][${j - k}]`) 
-                            lookingForWhereToGo = false
+                            gameArray[i][j - k] += Number(pieceToMove.textContent)
+                            
                         } else {
-                            positionPiece(pieceToMove, i, j - k + 1)
-                            console.log(`New position: [${i}][${j - k + 1}]`) // Move to next position if different value
-                            lookingForWhereToGo = false
-                        } 
+                            positionPiece(pieceToMove, i, j - k + 1) // Move to next position if different value
+                            gameArray[i][j - k + 1] += Number(pieceToMove.textContent)
+                        }
+                        gameArray[i][j] = 0
+                        lookingForWhereToGo = false
 }}}}}}
 
 // function reset() {
