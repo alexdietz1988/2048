@@ -31,7 +31,6 @@ function randomOpenIndex() {
     return [row, column];
 }
 
-
 // Use an index on the gameboard array to position an element
 function positionPiece(piece, row, column) {
     let top = row * 100;
