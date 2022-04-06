@@ -108,9 +108,14 @@ function moveLeft() {
                         } 
 }}}}}}
 
-moveLeft()
+// function reset() {
+    
+// }
 
 // 2. In my HTML and CSS, I'll create a button to move pieces left. In my JavaScript, I'll grab it and give it an event listener so that clicking it will call the "move left" function.
+$('.left').on('click', moveLeft)
+// $('.left').on('click', reset)
+
 // 3. For the case where a piece moves to the square held by a piece of the same value, I'll create a function to remove both pieces and replace them with a piece of the appropriate value.
 // 4. I'll create similar functions and buttons for moving right, up, or down.
 // 5. (Stretch) I may try writing event listeners to allow the user to move the pieces by using their arrow keys.
