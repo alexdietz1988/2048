@@ -82,20 +82,17 @@ function pieceAtPosition(row, column) {
 
 function moveLeft() {
 
-    let pieceToMove;
-
     for (let i = 0; i < 4; i++) { // Look at each row
         for (let j = 1; j < 4; j++) { // Look at the latter three columns
 
             if (gameArray[i][j] > 0) { // Find the leftmost piece
-                pieceToMove = pieceAtPosition(i, j)
-
+                let pieceToMove = pieceAtPosition(i, j)
                 let lookingForWhereToGo = true;
                 let k = 1;
 
                 while (lookingForWhereToGo) {
                     if (gameArray[i][j - k] === 0) k++ // If the square is empty, look to its left
-                    else if (gameArray[i][j - k] === 0 === false) { // Once you find a non-empty square or the end of the board...
+                    else if (gameArray[i][j - k] !== 0) { // Once you find a non-empty square or the end of the board...
                         
                         if (gameArray[i][j - k] === gameArray[i][j]) {
                             positionPiece(pieceToMove, i, j - k) // Move to that position if same value
@@ -105,8 +102,8 @@ function moveLeft() {
                             positionPiece(pieceToMove, i, j - k + 1) // Move to next position if different value
                             gameArray[i][j - k + 1] += Number(pieceToMove.textContent)
                         }
-                        gameArray[i][j] = 0
-                        lookingForWhereToGo = false
+                    gameArray[i][j] = 0
+                    lookingForWhereToGo = false
 }}}}}}
 
 // function reset() {
