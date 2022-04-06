@@ -13,33 +13,33 @@ function randomOpenIndex() {
 
     let row;
     let column;
-    let lookingForOpenRow = true
-    let lookingForOpenColumn = true
+    let lookingForOpenRow = true;
+    let lookingForOpenColumn = true;
 
     // Find a random row that contains a 0
     while (lookingForOpenRow) {
-        row = Math.floor(Math.random() * 4) // Generate a random number between 0 and 3 (inclusive)
+        row = Math.floor(Math.random() * 4); // Generate a random number between 0 and 3 (inclusive)
         if (gameArray[row].some(element => element === 0)) lookingForOpenRow = false
     }
 
     // Find a random element in that row equal to 0
     while (lookingForOpenColumn) {
-        column = Math.floor(Math.random() * 4) // Generate a random number between 0 and 3 (inclusive)
+        column = Math.floor(Math.random() * 4); // Generate a random number between 0 and 3 (inclusive)
         if (gameArray[row][column] === 0) lookingForOpenColumn = false
     }
 
-    return [row, column]
+    return [row, column];
 }
 
-randomOpenIndex()
 
-// 4. I'll create a function to take an index on the gameboard array and give an element the appropriate location on the actual gameboard using CSS.
+// Use an index on the gameboard array to position an element
+function positionPiece(piece, row, column) {
+    let top = row * 100;
+    let left = column * 100
+    $(piece).css( {'top': `${row}px`, 'left': `${column}px`})
+}
 
-// $('.num1').click( () => {
-//     // $('.num1').css( {'transform': 'translate(-100px, 100px)'})
-//     $('.num1').css( {'left': '0px', 'top': '0px'} )
-//     }
-// )
+// positionPiece($('.piece'), ...randomOpenIndex())
 
 // 5. I'll create a function to generate new pieces using the functions in (3) and (4), and call it twice to generate the first two pieces.
 
