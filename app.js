@@ -38,21 +38,17 @@ function positionPiece(piece, row, column) {
     $(piece).css( {'top': `${top}px`, 'left': `${left}px`})
 }
 
-// let newPosition = randomOpenIndex()
-// // console.log(newPosition)
-// positionPiece($('.piece'), ...randomOpenIndex)
-
 // 5. I'll create a function to generate new pieces using the functions in (3) and (4), and call it twice to generate the first two pieces.
 
 function newPiece () {
     let $newPiece = $('<div class="square piece">2</div>')
+    let position = [...randomOpenIndex()]
     $('.gameboard').prepend($newPiece)
-    positionPiece($('.piece'), ...randomOpenIndex())
+    positionPiece($('.piece'), ...position)
+    gameArray[position[0]][position[1]] = 2
 }
 
 newPiece()
-
-// Update the game array
 
 // ### Moving pieces
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
