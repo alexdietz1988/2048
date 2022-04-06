@@ -1,6 +1,6 @@
 // ### Initializing the gameboard
 
-// An array representing the values of pieces at each square on the gameboard.
+// Array representing the values at each square
 let gameArray = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -8,16 +8,38 @@ let gameArray = [
     [0, 0, 0, 0],
 ]
 
+// Find a random open index on gameArray
+function randomOpenIndex() {
 
+    let row;
+    let column;
+    let lookingForOpenRow = true
+    let lookingForOpenColumn = true
 
-// 3. I'll create a function to randomly choose open squares for new pieces to be located, using the gameboard array.
+    // Find a random row that contains a 0
+    while (lookingForOpenRow) {
+        row = Math.floor(Math.random() * 4) // Generate a random number between 0 and 3 (inclusive)
+        if (gameArray[row].some(element => element === 0)) lookingForOpenRow = false
+    }
+
+    // Find a random element in that row equal to 0
+    while (lookingForOpenColumn) {
+        column = Math.floor(Math.random() * 4) // Generate a random number between 0 and 3 (inclusive)
+        if (gameArray[row][column] === 0) lookingForOpenColumn = false
+    }
+
+    return [row, column]
+}
+
+randomOpenIndex()
+
 // 4. I'll create a function to take an index on the gameboard array and give an element the appropriate location on the actual gameboard using CSS.
 
-$('.num1').click( () => {
-    // $('.num1').css( {'transform': 'translate(-100px, 100px)'})
-    $('.num1').css( {'left': '0px', 'top': '0px'} )
-    }
-)
+// $('.num1').click( () => {
+//     // $('.num1').css( {'transform': 'translate(-100px, 100px)'})
+//     $('.num1').css( {'left': '0px', 'top': '0px'} )
+//     }
+// )
 
 // 5. I'll create a function to generate new pieces using the functions in (3) and (4), and call it twice to generate the first two pieces.
 
