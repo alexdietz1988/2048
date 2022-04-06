@@ -53,6 +53,31 @@ newPiece(); newPiece()
 
 // ### Moving pieces
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
+
+function moveLeft() {
+
+    let newPosition;
+    let lookingForOpenIndex = true;
+
+    for (let i = 0; i < 4; i++) { // Look at each row
+        for (let j = 1; j < 3; j++) { // Look at the latter three columns
+            if (gameArray[i][j] > 0) { // Find the leftmost piece
+
+                while (lookingForOpenIndex) {
+                    let k = 1;
+                    if (gameArray[i][j - k] === 0) k++ // If the square is empty, look to its left
+                    else if (gameArray[i][j - k] !== 0) { // Once you find a non-empty square or the end of the board...
+                        // Move to that position (if same value) or to next position (if different value)
+                        lookingForOpenIndex = false
+                    }
+                }
+
+            }
+        }
+    }
+
+}
+
 // 2. In my HTML and CSS, I'll create a button to move pieces left. In my JavaScript, I'll grab it and give it an event listener so that clicking it will call the "move left" function.
 // 3. For the case where a piece moves to the square held by a piece of the same value, I'll create a function to remove both pieces and replace them with a piece of the appropriate value.
 // 4. I'll create similar functions and buttons for moving right, up, or down.
