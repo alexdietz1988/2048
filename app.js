@@ -35,10 +35,12 @@ function randomOpenIndex() {
 function positionPiece(piece, row, column) {
     let top = row * 100;
     let left = column * 100
-    $(piece).css( {'top': `${row}px`, 'left': `${column}px`})
+    $(piece).css( {'top': `${top}px`, 'left': `${left}px`})
 }
 
-// positionPiece($('.piece'), ...randomOpenIndex())
+let newPosition = randomOpenIndex()
+console.log(newPosition)
+positionPiece($('.piece'), ...newPosition)
 
 // 5. I'll create a function to generate new pieces using the functions in (3) and (4), and call it twice to generate the first two pieces.
 
