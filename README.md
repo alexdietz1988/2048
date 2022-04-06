@@ -1,5 +1,9 @@
 # 2048
 
+## Wireframes
+![image](./wireframe.png)
+![image](./wireframe2.png)
+
 ## User stories
 1. As a user, I see the gameboard, which is a 4x4 grid of squares, has begun with two "2" pieces located at random squares.
 2. I can click buttons to move the pieces left, right, up, or down.
@@ -31,7 +35,3 @@
 ### Endgame
 1. I'll create functions to check the gameboard array after each move for a win or loss. If it finds one, it will end the game and display an appropriate message.
 2. I'll create a reset button to reset the gameboard.
-
-## Wireframes
-![image](./wireframe.png)
-![image](./wireframe2.png)
