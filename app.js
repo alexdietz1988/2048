@@ -40,14 +40,16 @@ function positionPiece(piece, row, column) {
 
 // 5. I'll create a function to generate new pieces using the functions in (3) and (4), and call it twice to generate the first two pieces.
 
-function newPiece () {
+function newPiece() {
     let $newPiece = $('<div class="square piece">2</div>')
     let position = [...randomOpenIndex()]
+    console.log(position)
     $('.gameboard').prepend($newPiece)
-    positionPiece($('.piece'), ...position)
+    positionPiece($newPiece, ...position)
     gameArray[position[0]][position[1]] = 2
 }
 
+newPiece()
 newPiece()
 
 // ### Moving pieces
