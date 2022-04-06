@@ -42,7 +42,6 @@ function positionPiece(piece, row, column) {
 function newPiece() {
     let $newPiece = $('<div class="square piece">2</div>')
     let position = [...randomOpenIndex()]
-    console.log(position)
     $('.gameboard').prepend($newPiece)
     positionPiece($newPiece, ...position)
     gameArray[position[0]][position[1]] = 2
@@ -56,19 +55,24 @@ newPiece(); newPiece()
 
 function moveLeft() {
 
-    let newPosition;
-    let lookingForOpenIndex = true;
-
     for (let i = 0; i < 4; i++) { // Look at each row
-        for (let j = 1; j < 3; j++) { // Look at the latter three columns
+        for (let j = 1; j < 4; j++) { // Look at the latter three columns
             if (gameArray[i][j] > 0) { // Find the leftmost piece
 
-                while (lookingForOpenIndex) {
-                    let k = 1;
+                let lookingForWhereToGo = true;
+                let k = 1;
+
+                while (lookingForWhereToGo) {
                     if (gameArray[i][j - k] === 0) k++ // If the square is empty, look to its left
-                    else if (gameArray[i][j - k] !== 0) { // Once you find a non-empty square or the end of the board...
-                        // Move to that position (if same value) or to next position (if different value)
-                        lookingForOpenIndex = false
+                    else if (gameArray[i][j - k] === 0 === false) { // Once you find a non-empty square or the end of the board...
+
+                        if (gameArray[i][j - k] === gameArray[i][j]) {
+                            console.log(`New position: [${i}][${j - k}]`) // Move to that position if same value
+                            lookingForWhereToGo = false
+                        } else {
+                            console.log(`New position: [${i}][${j - k + 1}]`) // Move to next position if different value
+                            lookingForWhereToGo = false
+                        } 
                     }
                 }
 
@@ -77,6 +81,10 @@ function moveLeft() {
     }
 
 }
+
+moveLeft()
+
+// Find piece at position
 
 // 2. In my HTML and CSS, I'll create a button to move pieces left. In my JavaScript, I'll grab it and give it an event listener so that clicking it will call the "move left" function.
 // 3. For the case where a piece moves to the square held by a piece of the same value, I'll create a function to remove both pieces and replace them with a piece of the appropriate value.
