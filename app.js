@@ -36,35 +36,46 @@ function positionPiece(piece, row, column) {
     let top = row * 100;
     let left = column * 100;
     $(piece).css( {'top': `${top}px`, 'left': `${left}px`})
+    piece[0].dataset.position = `${row},${column}`
+    gameArray[row][column] = piece[0].dataset.value
 }
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
+    let $newPiece = $('<div class="square piece" data-value="2" data-position=" ">2</div>')
     $('.gameboard').prepend($newPiece)
 
     let newRow = [...randomOpenIndex()][0]
     let newColumn = [...randomOpenIndex()][1]
     positionPiece($newPiece, newRow, newColumn)
-    $newPiece.data().position = `${newRow}, ${newColumn}`
-    gameArray[newRow][newColumn] = $newPiece.data().value
+    // console.log($newPiece[0].dataset)
+    // console.table(gameArray)
 }
 
 // Call newPiece() twice to generate the first two pieces
-// newPiece(); newPiece()
+newPiece(); newPiece()
 
 // TEST PIECES
-let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
-$('.gameboard').prepend($testPiece)
-positionPiece($testPiece, 1,1)
-$testPiece[0].dataset.position = '1,1'
-gameArray[1][1] = 2
+    // let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
+    // $('.gameboard').prepend($testPiece)
+    // positionPiece($testPiece, 1,1)
+    // $testPiece[0].dataset.position = '1,1'
+    // gameArray[1][1] = 2
 
-let $testPiece2 = $('<div class="square piece" data-value="2" data-position=""">2</div>')
-$('.gameboard').prepend($testPiece2)
-positionPiece($testPiece2, 1,1)
-$testPiece2[0].dataset.position = '1,1'
-gameArray[1][1] = 2
+    // let $testPiece2 = $('<div class="square piece" data-value="2" data-position=""">2</div>')
+    // $('.gameboard').prepend($testPiece2)
+    // positionPiece($testPiece2, 1,3)
+    // $testPiece2[0].dataset.position = '1,3'
+    // gameArray[1][3] = 2
+
+    // let $testPiece3 = $('<div class="square piece" data-value="2" data-position="">2</div>')
+    // $('.gameboard').prepend($testPiece3)
+    // positionPiece($testPiece3, 1,1)
+    // $testPiece3[0].dataset.position = '1,1'
+    // gameArray[1][1] = 2
+
+    // let pieces = document.querySelectorAll(`[data-position="1,1"]`)
+    // console.log(pieces)
 
 // ### Moving pieces
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
@@ -75,18 +86,16 @@ function pieceAtPosition(row, column) {
 }
 
 function combinePiecesAt(row, column) {
-    
-    let $pieces = $(`[data-position='${row},${column}']`)
-    if ($pieces.length < 2) console.log(`There aren't enough pieces to combine!`)
-    else $pieces[1].remove() // Remove one of the pieces
+    console.log('Gonna try to combine')
+    let pieces = document.querySelectorAll(`[data-position="${row},${column}"]`)
+    console.log(pieces[1])
+    pieces[1].remove() // Remove one of the pieces
 
-    let newValue = $pieces[0].dataset.value *= 2
-    $pieces[0].dataset.value = newValue // Double value of remaining piece
-    $pieces.text(newValue)
+    let newValue = pieces[0].dataset.value *= 2
+    pieces[0].dataset.value = newValue // Double value of remaining piece
+    $(pieces[0]).text(newValue)
     gameArray[row][column] = newValue
 }
-
-combinePiecesAt(1,1)
 
 function moveLeft() {
 
@@ -94,7 +103,8 @@ function moveLeft() {
         for (let c = 1; c < 4; c++) { // Look at the latter three columns
 
             if (gameArray[r][c] > 0) { // Find the leftmost piece
-                let pieceToMove = pieceAtPosition(r, c)[0]
+                let pieceToMove = pieceAtPosition(r, c)
+                console.log(pieceToMove)
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -109,7 +119,7 @@ function moveLeft() {
                             
                         } else {
                             positionPiece(pieceToMove, r, c - delta + 1) // Locate at next position if end of board or different value
-                            gameArray[r][c - delta + 1] = $(pieceToMove).data().value
+                            gameArray[r][c - delta + 1] = pieceToMove.dataset.value
                             if (c - delta + 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
                         }
                     lookingForWhereToGo = false
