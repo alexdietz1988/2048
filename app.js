@@ -77,7 +77,12 @@ function newPiece() {
 // ### Moving pieces
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
 
-// Find piece at position
+function move (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
+    pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
+    gameArray[newRow][newColumn] = gameArray[oldRow][oldColumn]
+    gameArray[oldRow][oldColumn] = 0
+    positionPiece(pieceToMove, newRow, newColumn)
+}
 
 function combine (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     // Remove the existing piece
@@ -103,7 +108,6 @@ function moveLeft() {
 
             if (gameArray[r][c] > 0) { // Find the leftmost piece
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
-                let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -114,14 +118,9 @@ function moveLeft() {
                         if (gameArray[r][c - delta] === gameArray[r][c]) { // Combine pieces at that position if same value
                             combine(pieceToMove, r, c, r, c - delta)
                             
-                        } else {
-                            positionPiece(pieceToMove, r, c - delta + 1) // Locate at next position if end of board or different value
-                            gameArray[r][c - delta + 1] = pieceValue
-                            if (c - delta + 1 !== c) { // If the piece has changed position, update its class and the gameArray
-                                pieceToMove.classList.replace(`r${r}c${c}`, `r${r}c${c - delta + 1}`)
-                                gameArray[r][c] = 0
-                            } 
-                        }
+                        } else if (c - delta + 1 !== c) { // Locate at next position if end of board or different value
+                            move(pieceToMove, r, c, r, c - delta + 1)
+                        } 
                     lookingForWhereToGo = false
         }}}}}
 
@@ -135,7 +134,6 @@ function moveRight() {
 
             if (gameArray[r][c] > 0) { // Find the rightmost piece
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
-                let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -146,14 +144,10 @@ function moveRight() {
                         if (gameArray[r][c + delta] === gameArray[r][c]) { // Combine pieces at that position if same value
                             combine (pieceToMove, r, c, r, c + delta)
                             
-                        } else {
-                            positionPiece(pieceToMove, r, c + delta - 1) // Locate at next position if end of board or different value
-                            gameArray[r][c + delta - 1] = pieceValue
-                            if (c + delta - 1 !== c) { // If the piece has changed position, update its class and the gameArray
-                                pieceToMove.classList.replace(`r${r}c${c}`, `r${r}c${c + delta - 1}`)
-                                gameArray[r][c] = 0
-                            }
+                        } else if (c + delta - 1 !== c) { // If different value or end of board, move to next square
+                            move(pieceToMove, r, c, r, c + delta - 1)
                         }
+                        
                     lookingForWhereToGo = false
         }}}}}
         
@@ -167,17 +161,13 @@ function moveUp() {
 
             if (gameArray[r][c] > 0) { // Find the uppermost piece
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
-                let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
                 while (lookingForWhereToGo) {
 
-                    if (r - delta < 0) {
-                        positionPiece(pieceToMove, r - delta + 1, c) // If you've reached the end of the board, locate at next square
-                        pieceToMove.classList.replace(`r${r}c${c}`, `r${r - delta}c${c}`)
-                        gameArray[r - delta + 1][c] = pieceValue
-                        lookingForWhereToGo = false
+                    if (r - delta < 0) { // If you've reached the end of the board, locate at next square
+                        move(pieceToMove, r, c, r - delta + 1, c)
 
                     } else if (gameArray[r - delta][c] === 0) { // If you've reached an empty square, keep looking up
                         delta++ 
@@ -185,18 +175,12 @@ function moveUp() {
                     } else if (gameArray[r - delta][c] > 0) { // If you've reached a non-empty square...
                         
                         if (gameArray[r - delta][c] === gameArray[r][c]) { // If same value, combine at that position
-                            combine (pieceToMove, r, c, r - delta, c)
+                            combine(pieceToMove, r, c, r - delta, c)
                             
-                        } else {
-                            positionPiece(pieceToMove, r - delta + 1, c) // Locate at next position if end of board or different value
-                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r - delta + 1}c${c}`)
-                            gameArray[r - delta + 1][c] = pieceValue
-                            if (r - delta + 1 !== r) {
-                                gameArray[r][c] = 0
-                            } // Update the gameArray if the piece has changed position
+                        } else if (r - delta + 1 !== r) {
+                            move(pieceToMove, r, c, r - delta + 1, c)
                         }
-
-                        lookingForWhereToGo = false
+                    lookingForWhereToGo = false
         }}}}}
 
     newPiece()
@@ -216,10 +200,7 @@ function moveDown() {
                 while (lookingForWhereToGo) {
 
                     if (r + delta > 3) { // If you've reached the end of the board, locate at next square
-                        positionPiece(pieceToMove, r + delta - 1, c) 
-                        pieceToMove.classList.replace(`r${r}c${c}`, `r${r + delta - 1}c${c}`)
-                        gameArray[r + delta - 1][c] = pieceValue
-                        lookingForWhereToGo = false
+                        move(pieceToMove, r, c, r + delta - 1, c)
 
                     } else if (gameArray[r + delta][c] === 0) { // If you've reached an empty square, keep looking down
                         delta++ 
@@ -229,16 +210,11 @@ function moveDown() {
                         if (gameArray[r + delta][c] === gameArray[r][c]) { // If same value, combine at that position
                             combine(r, c, r + delta, c)
                             
-                        } else {
-                            positionPiece(pieceToMove, r + delta - 1, c) // Locate at next position if end of board or different value
-                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r + delta - 1}c${c}`)
-                            gameArray[r + delta - 1][c] = pieceValue
-                            if (r + delta - 1 !== r) {
-                                gameArray[r][c] = 0
-                            } // Update the gameArray if the piece has changed position
+                        } else if (r + delta - 1 !== r) { // Locate at next position if end of board or different value
+                            move(pieceToMove, r, c, r + delta - 1, c)
                         }
 
-                        lookingForWhereToGo = false
+                    lookingForWhereToGo = false
         }}}}}
 
     newPiece()
