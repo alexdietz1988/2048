@@ -51,26 +51,27 @@ function newPiece() {
 }
 
 // Call newPiece() twice to generate the first two pieces
-newPiece(); newPiece()
+// newPiece(); newPiece()
+
+// TEST PIECES
+let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
+$('.gameboard').prepend($testPiece)
+positionPiece($testPiece, 1,1)
+$testPiece[0].dataset.position = '1,1'
+gameArray[1][1] = 2
+
+let $testPiece2 = $('<div class="square piece data-value="2" data-position=""">2</div>')
+$('.gameboard').prepend($testPiece2)
+positionPiece($testPiece2, 1,3)
+$testPiece2[0].dataset.position = '1,3'
+gameArray[1][3] = 2
 
 // ### Moving pieces
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
 
 // Find piece at position
 function pieceAtPosition(row, column) {
-
-    let 
-
-    // let pieces = document.querySelectorAll('.piece')
-    // let mysteryPieces = [];
-
-    // pieces.forEach( (piece, idx) => {
-    //     if (pieces[idx].style.top === `${row * 100}px` && pieces[idx].style.left === `${column * 100}px`) {
-    //         mysteryPieces.push(pieces[idx])
-    //         }
-    // }
-    // )
-    // return mysteryPieces
+    return $(`[data-position='${row},${column}']`)[0]
 }
 
 function combinePiecesAt(row, column) {
@@ -103,7 +104,7 @@ function moveLeft() {
                             
                         } else {
                             positionPiece(pieceToMove, r, c - delta + 1) // Locate at next position if end of board or different value
-                            gameArray[r][c - delta + 1] = pieceToMove.data().value
+                            gameArray[r][c - delta + 1] = $(pieceToMove).data().value
                             if (c - delta + 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
                         }
                     lookingForWhereToGo = false
@@ -189,20 +190,6 @@ function moveUp() {
 
     newPiece()
 }
-
-
-// TEST PIECE
-// let $testPiece = $('<div class="square piece">2</div>')
-// $('.gameboard').prepend($testPiece)
-// positionPiece($testPiece, 1,1)
-// gameArray[1][1] = 2
-
-// let $testPiece2 = $('<div class="square piece">2</div>')
-// $('.gameboard').prepend($testPiece2)
-// positionPiece($testPiece2, 1,3)
-// gameArray[1][3] = 2
-
-
 
 // 2. In my HTML and CSS, I'll create a button to move pieces left. In my JavaScript, I'll grab it and give it an event listener so that clicking it will call the "move left" function.
 $('.left').on('click', moveLeft)
