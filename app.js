@@ -165,33 +165,27 @@ function moveRight() {
 function moveUp() {
 
     for (let c = 0; c < 4; c++) { // Look at each column
-        console.log(`Looking at column ${c}`)
         for (let r = 1; r < 4; r++) { // Look at the bottom three rows
 
             if (gameArray[r][c] > 0) { // Find the uppermost piece
                 let pieceToMove = pieceAtPosition(r, c)
-                console.log(`Looking at the piece at ${r}, ${c}`)
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
                 while (lookingForWhereToGo) {
 
                     if (r - delta < 0) {
-                        console.log('I have reached the end of the board')
                         positionPiece(pieceToMove, r - delta + 1, c) // If you've reached the end of the board, locate at next square
                         gameArray[r - delta + 1][c] = pieceToMove.dataset.value
                         lookingForWhereToGo = false
 
                     } else if (gameArray[r - delta][c] === 0) { // If you've reached an empty square, keep looking up
-                        console.log('I will keep looking up')
                         delta++ 
 
                     } else if (gameArray[r - delta][c] > 0) { // If you've reached a non-empty square...
-                        console.log('I have reached a non-empty square')
                         
                         if (gameArray[r - delta][c] === gameArray[r][c]) { // Move to that position if same value
                             positionPiece(pieceToMove, r - delta, c) 
-                            console.log('I am going to combine pieces')
                             combinePiecesAt(r - delta, c)
                             gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
                             
@@ -199,7 +193,47 @@ function moveUp() {
                             positionPiece(pieceToMove, r - delta + 1, c) // Locate at next position if end of board or different value
                             gameArray[r - delta + 1][c] = pieceToMove.dataset.value
                             if (r - delta + 1 !== r) {
-                                console.log ('I am going to move the piece')
+                                gameArray[r][c] = 0
+                            } // Update the gameArray if the piece has changed position
+                        }
+
+                        lookingForWhereToGo = false
+        }}}}}
+
+    newPiece()
+}
+
+function moveDown() {
+
+    for (let c = 0; c < 4; c++) { // Look at each column
+        for (let r = 0; r < 3; r++) { // Look at the top three rows
+
+            if (gameArray[r][c] > 0) { // Find the bottommost piece
+                let pieceToMove = pieceAtPosition(r, c)
+                let lookingForWhereToGo = true;
+                let delta = 1;
+
+                while (lookingForWhereToGo) {
+
+                    if (r + delta > 3) { // If you've reached the end of the board, locate at next square
+                        positionPiece(pieceToMove, r + delta - 1, c) 
+                        gameArray[r + delta - 1][c] = pieceToMove.dataset.value
+                        lookingForWhereToGo = false
+
+                    } else if (gameArray[r + delta][c] === 0) { // If you've reached an empty square, keep looking down
+                        delta++ 
+
+                    } else if (gameArray[r + delta][c] > 0) { // If you've reached a non-empty square...
+                        
+                        if (gameArray[r + delta][c] === gameArray[r][c]) { // Move to that position if same value
+                            positionPiece(pieceToMove, r + delta, c) 
+                            combinePiecesAt(r + delta, c)
+                            gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
+                            
+                        } else {
+                            positionPiece(pieceToMove, r + delta - 1, c) // Locate at next position if end of board or different value
+                            gameArray[r + delta - 1][c] = pieceToMove.dataset.value
+                            if (r + delta - 1 !== r) {
                                 gameArray[r][c] = 0
                             } // Update the gameArray if the piece has changed position
                         }
@@ -214,6 +248,7 @@ function moveUp() {
 $('.left').on('click', moveLeft)
 $('.right').on('click', moveRight)
 $('.up').on('click', moveUp)
+$('.down').on('click', moveDown)
 
 // 3. For the case where a piece moves to the square held by a piece of the same value, I'll create a function to remove both pieces and replace them with a piece of the appropriate value.
 // 4. I'll create similar functions and buttons for moving right, up, or down.
