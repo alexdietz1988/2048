@@ -40,14 +40,13 @@ function positionPiece(piece, row, column) {
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece = $('<div class="square piece" data-value="2" data-row="" data-column="">2</div>')
-    let position = [...randomOpenIndex()]
-    let newRow = position[0]
-    let newColumn = position[1]
+    let $newPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
     $('.gameboard').prepend($newPiece)
+
+    let newRow = [...randomOpenIndex()][0]
+    let newColumn = [...randomOpenIndex()][1]
     positionPiece($newPiece, newRow, newColumn)
-    $newPiece.data().row = newRow
-    $newPiece.data().column = newColumn
+    $newPiece.data().position = `${newRow}, ${newColumn}`
     gameArray[newRow][newColumn] = $newPiece.data().value
 }
 
@@ -58,18 +57,21 @@ newPiece(); newPiece()
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
 
 // Find piece at position
-// function pieceAtPosition(row, column) {
-//     let pieces = document.querySelectorAll('.piece')
-//     let mysteryPieces = [];
+function pieceAtPosition(row, column) {
 
-//     pieces.forEach( (piece, idx) => {
-//         if (pieces[idx].style.top === `${row * 100}px` && pieces[idx].style.left === `${column * 100}px`) {
-//             mysteryPieces.push(pieces[idx])
-//             }
-//     }
-//     )
-//     return mysteryPieces
-// }
+    let 
+
+    // let pieces = document.querySelectorAll('.piece')
+    // let mysteryPieces = [];
+
+    // pieces.forEach( (piece, idx) => {
+    //     if (pieces[idx].style.top === `${row * 100}px` && pieces[idx].style.left === `${column * 100}px`) {
+    //         mysteryPieces.push(pieces[idx])
+    //         }
+    // }
+    // )
+    // return mysteryPieces
+}
 
 function combinePiecesAt(row, column) {
     let pieces = pieceAtPosition(row, column)
