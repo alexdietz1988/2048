@@ -36,8 +36,13 @@ function positionPiece(piece, row, column) {
     let top = row * 100;
     let left = column * 100;
     $(piece).css( {'top': `${top}px`, 'left': `${left}px`})
-    piece[0].dataset.position = `${row},${column}`
-    gameArray[row][column] = piece[0].dataset.value
+    piece.dataset.position = `${row},${column}`
+    gameArray[row][column] = piece.dataset.value
+    // console.log(piece)
+    // console.log(piece.dataset)
+    // console.log(piece.dataset.position)
+    // console.log(piece.dataset.value)
+    // console.table(gameArray)
 }
 
 // Generate a new piece at a random open square
@@ -47,13 +52,14 @@ function newPiece() {
 
     let newRow = [...randomOpenIndex()][0]
     let newColumn = [...randomOpenIndex()][1]
-    positionPiece($newPiece, newRow, newColumn)
+    positionPiece($newPiece[0], newRow, newColumn)
     // console.log($newPiece[0].dataset)
     // console.table(gameArray)
 }
 
 // Call newPiece() twice to generate the first two pieces
-newPiece(); newPiece()
+newPiece()
+newPiece()
 
 // TEST PIECES
     // let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
