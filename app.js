@@ -45,7 +45,7 @@ function positionPiece(piece, row, column) {
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece = $('<div class="square piece" data-value="2" data-position=" ">2</div>')
+    let $newPiece = $('<div class="square piece v2" data-value="2" data-position=" ">2</div>')
     $('.gameboard').prepend($newPiece)
 
     let newRow = [...randomOpenIndex()][0]
@@ -90,13 +90,13 @@ function pieceAtPosition(row, column) {
 }
 
 function combinePiecesAt(row, column) {
-    console.log('Gonna try to combine')
     let pieces = document.querySelectorAll(`[data-position="${row},${column}"]`)
-    console.log(pieces[1])
     pieces[1].remove() // Remove one of the pieces
 
+    // Double value of remaining piece
     let newValue = pieces[0].dataset.value *= 2
-    pieces[0].dataset.value = newValue // Double value of remaining piece
+    pieces[0].dataset.value = newValue
+    $(pieces[0]).addClass(`v${newValue}`)
     $(pieces[0]).text(newValue)
     gameArray[row][column] = newValue
 }

@@ -17,10 +17,8 @@
 }
 
 .piece {
-    background-color: gray;
     border: 1px solid black;
     font-size: 32px;
-    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -34,3 +32,15 @@
 button {
     font-size: 16px;
 }
+
+.v2 {background-color: gray}
+.v4 {background-color: yellow}
+.v8 {background-color: green}
+.v16 {background-color: orange}
+.v32 {background-color: red}
+.v64 {background-color: blue}
+.v128 {background-color: purple}
+.v256 {background-color: brown}
+.v512 {background-color: black}
+.v1024 {background-color: aqua;}
+.v2048 {background-color: coral;}
