@@ -38,7 +38,6 @@ newPiece()
 // Use an index on the gameboard array to position an element
 function positionPiece(piece, row, column) {
     $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
-    $(piece).addClass(`r${row}c${column}`)
 }
 
 // Generate a new piece at a random open square
@@ -49,6 +48,7 @@ function newPiece() {
     let row = [...randomOpenIndex()][0]
     let column = [...randomOpenIndex()][1]
     positionPiece($newPiece[0], row, column)
+    $newPiece.addClass(`r${row}c${column}`)
     gameArray[row][column] = 2
 }
 
@@ -79,16 +79,21 @@ function newPiece() {
 
 // Find piece at position
 
-function combinePiecesAt(row, column) {
-    let pieces = document.querySelectorAll(`.r${row}c${column}`)
-    console.log(pieces)
-    pieces[1].remove() // Remove one of the pieces
+function combine (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
+    // Remove the existing piece
+    let existingPiece = document.querySelector(`.r${newRow}c${newColumn}`)
+    existingPiece.remove()
+
+    // Move the new piece
+    pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
+    positionPiece(pieceToMove, newRow, newColumn)
+    gameArray[oldRow][oldColumn] = 0 // Update the gameArray to reflect that the piece has moved
 
     // Double value of remaining piece
-    let newValue = gameArray[row][column] * 2
-    pieces[0].classList.replace(`v${newValue / 2}`, `v${newValue}`)
-    $(pieces[0]).text(newValue)
-    gameArray[row][column] = newValue
+    let newValue = gameArray[newRow][newColumn] * 2
+    pieceToMove.classList.replace(`v${newValue / 2}`, `v${newValue}`)
+    $(pieceToMove).text(newValue)
+    gameArray[newRow][newColumn] = newValue
 }
 
 function moveLeft() {
@@ -106,11 +111,8 @@ function moveLeft() {
                     if (gameArray[r][c - delta] === 0) delta++ // If the square to its left is empty, keep looking left
                     else if (c - delta < 0 || gameArray[r][c - delta] !== 0) { // Once you find the end of the board or a non-empty square...
                         
-                        if (gameArray[r][c - delta] === gameArray[r][c]) { // Move to that position if same value
-                            positionPiece(pieceToMove, r, c - delta)
-                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r}c${c - delta}`)
-                            combinePiecesAt(r, c - delta)
-                            gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
+                        if (gameArray[r][c - delta] === gameArray[r][c]) { // Combine pieces at that position if same value
+                            combine(pieceToMove, r, c, r, c - delta)
                             
                         } else {
                             positionPiece(pieceToMove, r, c - delta + 1) // Locate at next position if end of board or different value
@@ -141,11 +143,8 @@ function moveRight() {
                     if (gameArray[r][c + delta] === 0) delta++ // If the square to its right is empty, keep looking right
                     else if (c + delta > 3 || gameArray[r][c + delta] !== 0) { // Once you find the end of the board or a non-empty square...
                         
-                        if (gameArray[r][c + delta] === gameArray[r][c]) {
-                            positionPiece(pieceToMove, r, c + delta) // Move to that position if same value
-                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r}c${c + delta}`)
-                            combinePiecesAt(r, c + delta)
-                            gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
+                        if (gameArray[r][c + delta] === gameArray[r][c]) { // Combine pieces at that position if same value
+                            combine (pieceToMove, r, c, r, c + delta)
                             
                         } else {
                             positionPiece(pieceToMove, r, c + delta - 1) // Locate at next position if end of board or different value
@@ -185,11 +184,8 @@ function moveUp() {
 
                     } else if (gameArray[r - delta][c] > 0) { // If you've reached a non-empty square...
                         
-                        if (gameArray[r - delta][c] === gameArray[r][c]) { // Move to that position if same value
-                            positionPiece(pieceToMove, r - delta, c)
-                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r - delta}c${c}`)
-                            combinePiecesAt(r - delta, c)
-                            gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
+                        if (gameArray[r - delta][c] === gameArray[r][c]) { // If same value, combine at that position
+                            combine (pieceToMove, r, c, r - delta, c)
                             
                         } else {
                             positionPiece(pieceToMove, r - delta + 1, c) // Locate at next position if end of board or different value
@@ -230,11 +226,8 @@ function moveDown() {
 
                     } else if (gameArray[r + delta][c] > 0) { // If you've reached a non-empty square...
                         
-                        if (gameArray[r + delta][c] === gameArray[r][c]) { // Move to that position if same value
-                            positionPiece(pieceToMove, r + delta, c) 
-                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r + delta}c${c}`)
-                            combinePiecesAt(r + delta, c)
-                            gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
+                        if (gameArray[r + delta][c] === gameArray[r][c]) { // If same value, combine at that position
+                            combine(r, c, r + delta, c)
                             
                         } else {
                             positionPiece(pieceToMove, r + delta - 1, c) // Locate at next position if end of board or different value
