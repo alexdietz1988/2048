@@ -48,7 +48,7 @@ function newPiece() {
 }
 
 // Call newPiece() twice to generate the first two pieces
-// newPiece(); newPiece()
+newPiece(); newPiece()
 
 // ### Moving pieces
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
@@ -69,28 +69,28 @@ function pieceAtPosition(row, column) {
 
 function moveLeft() {
 
-    for (let i = 0; i < 4; i++) { // Look at each row
-        for (let j = 1; j < 4; j++) { // Look at the latter three columns
+    for (let r = 0; r < 4; r++) { // Look at each row
+        for (let c = 1; c < 4; c++) { // Look at the latter three columns
 
-            if (gameArray[i][j] > 0) { // Find the leftmost piece
-                let pieceToMove = pieceAtPosition(i, j)
+            if (gameArray[r][c] > 0) { // Find the leftmost piece
+                let pieceToMove = pieceAtPosition(r, c)
                 let lookingForWhereToGo = true;
-                let k = 1;
+                let delta = 1;
 
                 while (lookingForWhereToGo) {
-                    if (gameArray[i][j - k] === 0) k++ // If the square is empty, look to its left
-                    else if (gameArray[i][j - k] !== 0) { // Once you find a non-empty square or the end of the board...
+                    if (gameArray[r][c - delta] === 0) delta++ // If the square is empty, look to its left
+                    else if (gameArray[r][c - delta] !== 0) { // Once you find a non-empty square or the end of the board...
                         
-                        if (gameArray[i][j - k] === gameArray[i][j]) {
-                            positionPiece(pieceToMove, i, j - k) // Move to that position if same value
-                            gameArray[i][j - k] += Number(pieceToMove.textContent)
-                            combinePiecesAt(i, j - k)
+                        if (gameArray[r][c - delta] === gameArray[r][c]) {
+                            positionPiece(pieceToMove, r, c - delta) // Move to that position if same value
+                            gameArray[r][c - delta] += Number(pieceToMove.textContent)
+                            combinePiecesAt(r, c - delta)
                             
                         } else {
-                            positionPiece(pieceToMove, i, j - k + 1) // Move to next position if different value
-                            gameArray[i][j - k + 1] += Number(pieceToMove.textContent)
+                            positionPiece(pieceToMove, r, c - delta + 1) // Move to next position if different value
+                            gameArray[r][c - delta + 1] += Number(pieceToMove.textContent)
                         }
-                    gameArray[i][j] = 0
+                    gameArray[r][c] = 0
                     lookingForWhereToGo = false
 }}}}}}
 
