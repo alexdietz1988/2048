@@ -107,14 +107,18 @@ function moveLeft() {
                     else if (c - delta < 0 || gameArray[r][c - delta] !== 0) { // Once you find the end of the board or a non-empty square...
                         
                         if (gameArray[r][c - delta] === gameArray[r][c]) { // Move to that position if same value
-                            positionPiece(pieceToMove, r, c - delta) 
+                            positionPiece(pieceToMove, r, c - delta)
+                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r}c${c - delta}`)
                             combinePiecesAt(r, c - delta)
                             gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
                             
                         } else {
                             positionPiece(pieceToMove, r, c - delta + 1) // Locate at next position if end of board or different value
                             gameArray[r][c - delta + 1] = pieceValue
-                            if (c - delta + 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
+                            if (c - delta + 1 !== c) { // If the piece has changed position, update its class and the gameArray
+                                pieceToMove.classList.replace(`r${r}c${c}`, `r${r}c${c - delta + 1}`)
+                                gameArray[r][c] = 0
+                            } 
                         }
                     lookingForWhereToGo = false
         }}}}}
@@ -139,13 +143,17 @@ function moveRight() {
                         
                         if (gameArray[r][c + delta] === gameArray[r][c]) {
                             positionPiece(pieceToMove, r, c + delta) // Move to that position if same value
+                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r}c${c + delta}`)
                             combinePiecesAt(r, c + delta)
                             gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
                             
                         } else {
                             positionPiece(pieceToMove, r, c + delta - 1) // Locate at next position if end of board or different value
                             gameArray[r][c + delta - 1] = pieceValue
-                            if (c + delta - 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
+                            if (c + delta - 1 !== c) { // If the piece has changed position, update its class and the gameArray
+                                pieceToMove.classList.replace(`r${r}c${c}`, `r${r}c${c + delta - 1}`)
+                                gameArray[r][c] = 0
+                            }
                         }
                     lookingForWhereToGo = false
         }}}}}
@@ -168,6 +176,7 @@ function moveUp() {
 
                     if (r - delta < 0) {
                         positionPiece(pieceToMove, r - delta + 1, c) // If you've reached the end of the board, locate at next square
+                        pieceToMove.classList.replace(`r${r}c${c}`, `r${r - delta}c${c}`)
                         gameArray[r - delta + 1][c] = pieceValue
                         lookingForWhereToGo = false
 
@@ -177,12 +186,14 @@ function moveUp() {
                     } else if (gameArray[r - delta][c] > 0) { // If you've reached a non-empty square...
                         
                         if (gameArray[r - delta][c] === gameArray[r][c]) { // Move to that position if same value
-                            positionPiece(pieceToMove, r - delta, c) 
+                            positionPiece(pieceToMove, r - delta, c)
+                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r - delta}c${c}`)
                             combinePiecesAt(r - delta, c)
                             gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
                             
                         } else {
                             positionPiece(pieceToMove, r - delta + 1, c) // Locate at next position if end of board or different value
+                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r - delta + 1}c${c}`)
                             gameArray[r - delta + 1][c] = pieceValue
                             if (r - delta + 1 !== r) {
                                 gameArray[r][c] = 0
@@ -210,6 +221,7 @@ function moveDown() {
 
                     if (r + delta > 3) { // If you've reached the end of the board, locate at next square
                         positionPiece(pieceToMove, r + delta - 1, c) 
+                        pieceToMove.classList.replace(`r${r}c${c}`, `r${r + delta - 1}c${c}`)
                         gameArray[r + delta - 1][c] = pieceValue
                         lookingForWhereToGo = false
 
@@ -220,11 +232,13 @@ function moveDown() {
                         
                         if (gameArray[r + delta][c] === gameArray[r][c]) { // Move to that position if same value
                             positionPiece(pieceToMove, r + delta, c) 
+                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r + delta}c${c}`)
                             combinePiecesAt(r + delta, c)
                             gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
                             
                         } else {
                             positionPiece(pieceToMove, r + delta - 1, c) // Locate at next position if end of board or different value
+                            pieceToMove.classList.replace(`r${r}c${c}`, `r${r + delta - 1}c${c}`)
                             gameArray[r + delta - 1][c] = pieceValue
                             if (r + delta - 1 !== r) {
                                 gameArray[r][c] = 0
