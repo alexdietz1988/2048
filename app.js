@@ -100,6 +100,7 @@ function moveLeft() {
 
             if (gameArray[r][c] > 0) { // Find the leftmost piece
                 let pieceToMove = pieceAtPosition(r, c)
+                let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -114,7 +115,7 @@ function moveLeft() {
                             
                         } else {
                             positionPiece(pieceToMove, r, c - delta + 1) // Locate at next position if end of board or different value
-                            gameArray[r][c - delta + 1] = pieceToMove.dataset.value
+                            gameArray[r][c - delta + 1] = pieceValue
                             if (c - delta + 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
                         }
                     lookingForWhereToGo = false
@@ -130,6 +131,7 @@ function moveRight() {
 
             if (gameArray[r][c] > 0) { // Find the rightmost piece
                 let pieceToMove = pieceAtPosition(r, c)
+                let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -144,7 +146,7 @@ function moveRight() {
                             
                         } else {
                             positionPiece(pieceToMove, r, c + delta - 1) // Locate at next position if end of board or different value
-                            gameArray[r][c + delta - 1] = pieceToMove.dataset.value
+                            gameArray[r][c + delta - 1] = pieceValue
                             if (c + delta - 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
                         }
                     lookingForWhereToGo = false
@@ -160,6 +162,7 @@ function moveUp() {
 
             if (gameArray[r][c] > 0) { // Find the uppermost piece
                 let pieceToMove = pieceAtPosition(r, c)
+                let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -167,7 +170,7 @@ function moveUp() {
 
                     if (r - delta < 0) {
                         positionPiece(pieceToMove, r - delta + 1, c) // If you've reached the end of the board, locate at next square
-                        gameArray[r - delta + 1][c] = pieceToMove.dataset.value
+                        gameArray[r - delta + 1][c] = pieceValue
                         lookingForWhereToGo = false
 
                     } else if (gameArray[r - delta][c] === 0) { // If you've reached an empty square, keep looking up
@@ -182,7 +185,7 @@ function moveUp() {
                             
                         } else {
                             positionPiece(pieceToMove, r - delta + 1, c) // Locate at next position if end of board or different value
-                            gameArray[r - delta + 1][c] = pieceToMove.dataset.value
+                            gameArray[r - delta + 1][c] = pieceValue
                             if (r - delta + 1 !== r) {
                                 gameArray[r][c] = 0
                             } // Update the gameArray if the piece has changed position
@@ -201,6 +204,7 @@ function moveDown() {
 
             if (gameArray[r][c] > 0) { // Find the bottommost piece
                 let pieceToMove = pieceAtPosition(r, c)
+                let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -208,7 +212,7 @@ function moveDown() {
 
                     if (r + delta > 3) { // If you've reached the end of the board, locate at next square
                         positionPiece(pieceToMove, r + delta - 1, c) 
-                        gameArray[r + delta - 1][c] = pieceToMove.dataset.value
+                        gameArray[r + delta - 1][c] = pieceValue
                         lookingForWhereToGo = false
 
                     } else if (gameArray[r + delta][c] === 0) { // If you've reached an empty square, keep looking down
@@ -223,7 +227,7 @@ function moveDown() {
                             
                         } else {
                             positionPiece(pieceToMove, r + delta - 1, c) // Locate at next position if end of board or different value
-                            gameArray[r + delta - 1][c] = pieceToMove.dataset.value
+                            gameArray[r + delta - 1][c] = pieceValue
                             if (r + delta - 1 !== r) {
                                 gameArray[r][c] = 0
                             } // Update the gameArray if the piece has changed position
