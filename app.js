@@ -48,7 +48,7 @@ function newPiece() {
 }
 
 // Call newPiece() twice to generate the first two pieces
-// newPiece(); newPiece()
+newPiece(); newPiece()
 
 // ### Moving pieces
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
@@ -91,21 +91,21 @@ function moveLeft() {
                         }
                     gameArray[r][c] = 0
                     lookingForWhereToGo = false
-                    console.table(gameArray)
-}}}}}}
+        }}}}}
+        
+    newPiece()
+}
 
 // TEST PIECE
-let $testPiece = $('<div class="square piece">2</div>')
-$('.gameboard').prepend($testPiece)
-positionPiece($testPiece, 1,1)
-gameArray[1][1] = 2
+// let $testPiece = $('<div class="square piece">2</div>')
+// $('.gameboard').prepend($testPiece)
+// positionPiece($testPiece, 1,1)
+// gameArray[1][1] = 2
 
-let $testPiece2 = $('<div class="square piece">2</div>')
-$('.gameboard').prepend($testPiece2)
-positionPiece($testPiece2, 1,3)
-gameArray[1][3] = 2
-
-console.table(gameArray)
+// let $testPiece2 = $('<div class="square piece">2</div>')
+// $('.gameboard').prepend($testPiece2)
+// positionPiece($testPiece2, 1,3)
+// gameArray[1][3] = 2
 
 function combinePiecesAt(row, column) {
     let pieces = pieceAtPosition(row, column)
