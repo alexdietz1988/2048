@@ -78,12 +78,10 @@ function newPiece() {
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
 
 // Find piece at position
-function pieceAtPosition(row, column) {
-    return document.querySelector(`.r${row}c${column}`)
-}
 
 function combinePiecesAt(row, column) {
     let pieces = document.querySelectorAll(`.r${row}c${column}`)
+    console.log(pieces)
     pieces[1].remove() // Remove one of the pieces
 
     // Double value of remaining piece
@@ -99,7 +97,7 @@ function moveLeft() {
         for (let c = 1; c < 4; c++) { // Look at the latter three columns
 
             if (gameArray[r][c] > 0) { // Find the leftmost piece
-                let pieceToMove = pieceAtPosition(r, c)
+                let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
@@ -130,7 +128,7 @@ function moveRight() {
         for (let c = 2; c > -1; c--) { // Look at the first three columns, starting from the right
 
             if (gameArray[r][c] > 0) { // Find the rightmost piece
-                let pieceToMove = pieceAtPosition(r, c)
+                let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
@@ -161,7 +159,7 @@ function moveUp() {
         for (let r = 1; r < 4; r++) { // Look at the bottom three rows
 
             if (gameArray[r][c] > 0) { // Find the uppermost piece
-                let pieceToMove = pieceAtPosition(r, c)
+                let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
@@ -203,7 +201,7 @@ function moveDown() {
         for (let r = 0; r < 3; r++) { // Look at the top three rows
 
             if (gameArray[r][c] > 0) { // Find the bottommost piece
-                let pieceToMove = pieceAtPosition(r, c)
+                let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 let pieceValue = gameArray[r][c]
                 let lookingForWhereToGo = true;
                 let delta = 1;
