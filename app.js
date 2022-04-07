@@ -67,6 +67,13 @@ function pieceAtPosition(row, column) {
     return mysteryPieces
 }
 
+function combinePiecesAt(row, column) {
+    let pieces = pieceAtPosition(row, column)
+    pieces[1].remove() // Remove one of the pieces
+    pieces[0].textContent = (2 * Number(pieces[0].textContent)) // Double value of remaining piece
+    gameArray[row][column] = Number(pieces[0].textContent) // 
+}
+
 function moveLeft() {
 
     for (let r = 0; r < 4; r++) { // Look at each row
@@ -78,18 +85,19 @@ function moveLeft() {
                 let delta = 1;
 
                 while (lookingForWhereToGo) {
-                    if (gameArray[r][c - delta] === 0) delta++ // If the square is empty, look to its left
-                    else if (gameArray[r][c - delta] !== 0) { // Once you find a non-empty square or the end of the board...
+                    if (gameArray[r][c - delta] === 0) delta++ // If the square to its left is empty, keep looking left
+                    else if (c - delta < 0 || gameArray[r][c - delta] !== 0) { // Once you find the end of the board or a non-empty square...
                         
-                        if (gameArray[r][c - delta] === gameArray[r][c]) {
-                            positionPiece(pieceToMove, r, c - delta) // Move to that position if same value
+                        if (gameArray[r][c - delta] === gameArray[r][c]) { // Move to that position if same value
+                            positionPiece(pieceToMove, r, c - delta) 
                             combinePiecesAt(r, c - delta)
+                            gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
                             
                         } else {
-                            positionPiece(pieceToMove, r, c - delta + 1) // Move to next position if different value
+                            positionPiece(pieceToMove, r, c - delta + 1) // Locate at next position if end of board or different value
                             gameArray[r][c - delta + 1] = Number(pieceToMove.textContent)
+                            if (c - delta + 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
                         }
-                    gameArray[r][c] = 0
                     lookingForWhereToGo = false
         }}}}}
 
@@ -107,24 +115,66 @@ function moveRight() {
                 let delta = 1;
 
                 while (lookingForWhereToGo) {
-                    if (gameArray[r][c + delta] === 0) delta++ // If the square is empty, look to its right
-                    else if (gameArray[r][c + delta] !== 0) { // Once you find a non-empty square or the end of the board...
+                    if (gameArray[r][c + delta] === 0) delta++ // If the square to its right is empty, keep looking right
+                    else if (c + delta > 3 || gameArray[r][c + delta] !== 0) { // Once you find the end of the board or a non-empty square...
                         
                         if (gameArray[r][c + delta] === gameArray[r][c]) {
                             positionPiece(pieceToMove, r, c + delta) // Move to that position if same value
                             combinePiecesAt(r, c + delta)
+                            gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
                             
                         } else {
-                            positionPiece(pieceToMove, r, c + delta - 1) // Move to next position if different value
+                            positionPiece(pieceToMove, r, c + delta - 1) // Locate at next position if end of board or different value
                             gameArray[r][c + delta - 1] = Number(pieceToMove.textContent)
+                            if (c + delta - 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
                         }
-                    gameArray[r][c] = 0
                     lookingForWhereToGo = false
         }}}}}
         
     newPiece()
 }
 
+function moveUp() {
+
+    for (let c = 0; c < 4; c++) { // Look at each column
+        for (let r = 1; r < 4; r++) { // Look at the bottom three rows
+
+            if (gameArray[r][c] > 0) { // Find the top piece
+                let pieceToMove = pieceAtPosition(r, c)[0]
+                let lookingForWhereToGo = true;
+                let delta = 1;
+                console.log(r,c)
+
+                while (lookingForWhereToGo) {
+
+                    if (r - delta < 0) { // If you've reached the end of the board, move there
+                        positionPiece(pieceToMove, r - delta + 1, c)
+                        gameArray[r - delta + 1][c] = Number(pieceToMove.textContent)
+                        lookingForWhereToGo = false
+
+                    } else if (gameArray[r - delta][c] === gameArray[r][c]) { // If you've reached a piece of the same value, combine
+                        positionPiece(pieceToMove, r - delta, c)
+                        combinePiecesAt(r - delta, c)
+                        lookingForWhereToGo = false
+                        
+                    } else if (gameArray[r - delta][c] === 0) {
+                        console.log('moving up')
+                        delta++ // If the square above it is empty, keep looking up
+                    
+                    } else {
+                        positionPiece(pieceToMove, r - delta + 1, c) // Move to next position if different value
+                        gameArray[r - delta][c + 1] = Number(pieceToMove.textContent)
+                        lookingForWhereToGo = false
+                    }
+                }
+                gameArray[r][c] = 0
+
+                    
+            }
+        }
+    }
+    // newPiece()
+}
 
 
 // TEST PIECE
@@ -138,16 +188,12 @@ function moveRight() {
 // positionPiece($testPiece2, 1,3)
 // gameArray[1][3] = 2
 
-function combinePiecesAt(row, column) {
-    let pieces = pieceAtPosition(row, column)
-    pieces[1].remove() // Remove one of the pieces
-    pieces[0].textContent = (2 * Number(pieces[0].textContent)) // Double value of remaining piece
-    gameArray[row][column] = Number(pieces[0].textContent) // 
-}
+
 
 // 2. In my HTML and CSS, I'll create a button to move pieces left. In my JavaScript, I'll grab it and give it an event listener so that clicking it will call the "move left" function.
 $('.left').on('click', moveLeft)
 $('.right').on('click', moveRight)
+$('.up').on('click', moveUp)
 
 // 3. For the case where a piece moves to the square held by a piece of the same value, I'll create a function to remove both pieces and replace them with a piece of the appropriate value.
 // 4. I'll create similar functions and buttons for moving right, up, or down.
