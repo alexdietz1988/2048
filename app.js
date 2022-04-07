@@ -140,7 +140,7 @@ function moveRight() {
         for (let c = 2; c > -1; c--) { // Look at the first three columns, starting from the right
 
             if (gameArray[r][c] > 0) { // Find the rightmost piece
-                let pieceToMove = pieceAtPosition(r, c)[0]
+                let pieceToMove = pieceAtPosition(r, c)
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -155,7 +155,7 @@ function moveRight() {
                             
                         } else {
                             positionPiece(pieceToMove, r, c + delta - 1) // Locate at next position if end of board or different value
-                            gameArray[r][c + delta - 1] = Number(pieceToMove.textContent)
+                            gameArray[r][c + delta - 1] = pieceToMove.dataset.value
                             if (c + delta - 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
                         }
                     lookingForWhereToGo = false
