@@ -60,11 +60,11 @@ positionPiece($testPiece, 1,1)
 $testPiece[0].dataset.position = '1,1'
 gameArray[1][1] = 2
 
-let $testPiece2 = $('<div class="square piece data-value="2" data-position=""">2</div>')
+let $testPiece2 = $('<div class="square piece" data-value="2" data-position=""">2</div>')
 $('.gameboard').prepend($testPiece2)
-positionPiece($testPiece2, 1,3)
-$testPiece2[0].dataset.position = '1,3'
-gameArray[1][3] = 2
+positionPiece($testPiece2, 1,1)
+$testPiece2[0].dataset.position = '1,1'
+gameArray[1][1] = 2
 
 // ### Moving pieces
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
@@ -75,13 +75,18 @@ function pieceAtPosition(row, column) {
 }
 
 function combinePiecesAt(row, column) {
-    let pieces = pieceAtPosition(row, column)
-    console.log(pieces)
-    pieces[1].remove() // Remove one of the pieces
-    pieces[0].textContent = (2 * Number(pieces[0].textContent)) // Double value of remaining piece
-    gameArray[row][column] = Number(pieces[0].textContent) // 
-    console.table(gameArray)
+    
+    let $pieces = $(`[data-position='${row},${column}']`)
+    if ($pieces.length < 2) console.log(`There aren't enough pieces to combine!`)
+    else $pieces[1].remove() // Remove one of the pieces
+
+    let newValue = $pieces[0].dataset.value *= 2
+    $pieces[0].dataset.value = newValue // Double value of remaining piece
+    $pieces.text(newValue)
+    gameArray[row][column] = newValue
 }
+
+combinePiecesAt(1,1)
 
 function moveLeft() {
 
