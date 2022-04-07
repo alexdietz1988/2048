@@ -33,9 +33,7 @@ function randomOpenIndex() {
 
 // Use an index on the gameboard array to position an element
 function positionPiece(piece, row, column) {
-    let top = row * 100;
-    let left = column * 100;
-    $(piece).css( {'top': `${top}px`, 'left': `${left}px`})
+    $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
     piece.dataset.position = `${row},${column}`
     gameArray[row][column] = piece.dataset.value
     // console.log(piece)
@@ -171,7 +169,7 @@ function moveUp() {
         for (let r = 1; r < 4; r++) { // Look at the bottom three rows
 
             if (gameArray[r][c] > 0) { // Find the uppermost piece
-                let pieceToMove = pieceAtPosition(r, c)[0]
+                let pieceToMove = pieceAtPosition(r, c)
                 console.log(`Looking at the piece at ${r}, ${c}`)
                 let lookingForWhereToGo = true;
                 let delta = 1;
@@ -181,7 +179,7 @@ function moveUp() {
                     if (r - delta < 0) {
                         console.log('I have reached the end of the board')
                         positionPiece(pieceToMove, r - delta + 1, c) // If you've reached the end of the board, locate at next square
-                        gameArray[r - delta + 1][c] = Number(pieceToMove.textContent)
+                        gameArray[r - delta + 1][c] = pieceToMove.dataset.value
                         lookingForWhereToGo = false
 
                     } else if (gameArray[r - delta][c] === 0) { // If you've reached an empty square, keep looking up
@@ -199,7 +197,7 @@ function moveUp() {
                             
                         } else {
                             positionPiece(pieceToMove, r - delta + 1, c) // Locate at next position if end of board or different value
-                            gameArray[r - delta + 1][c] = Number(pieceToMove.textContent)
+                            gameArray[r - delta + 1][c] = pieceToMove.dataset.value
                             if (r - delta + 1 !== r) {
                                 console.log ('I am going to move the piece')
                                 gameArray[r][c] = 0
