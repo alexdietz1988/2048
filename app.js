@@ -31,33 +31,26 @@ function randomOpenIndex() {
     return [row, column];
 }
 
+// Call newPiece() twice to generate the first two pieces
+newPiece()
+newPiece()
+
 // Use an index on the gameboard array to position an element
 function positionPiece(piece, row, column) {
     $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
-    piece.dataset.position = `${row},${column}`
-    gameArray[row][column] = piece.dataset.value
-    // console.log(piece)
-    // console.log(piece.dataset)
-    // console.log(piece.dataset.position)
-    // console.log(piece.dataset.value)
-    // console.table(gameArray)
+    $(piece).addClass(`r${row}c${column}`)
 }
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece = $('<div class="square piece v2" data-value="2" data-position=" ">2</div>')
+    let $newPiece = $('<div class="square piece v2">2</div>')
     $('.gameboard').prepend($newPiece)
 
-    let newRow = [...randomOpenIndex()][0]
-    let newColumn = [...randomOpenIndex()][1]
-    positionPiece($newPiece[0], newRow, newColumn)
-    // console.log($newPiece[0].dataset)
-    // console.table(gameArray)
+    let row = [...randomOpenIndex()][0]
+    let column = [...randomOpenIndex()][1]
+    positionPiece($newPiece[0], row, column)
+    gameArray[row][column] = 2
 }
-
-// Call newPiece() twice to generate the first two pieces
-newPiece()
-newPiece()
 
 // TEST PIECES
     // let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
@@ -86,17 +79,16 @@ newPiece()
 
 // Find piece at position
 function pieceAtPosition(row, column) {
-    return $(`[data-position='${row},${column}']`)[0]
+    return document.querySelector(`.r${row}c${column}`)
 }
 
 function combinePiecesAt(row, column) {
-    let pieces = document.querySelectorAll(`[data-position="${row},${column}"]`)
+    let pieces = document.querySelectorAll(`.r${row}c${column}`)
     pieces[1].remove() // Remove one of the pieces
 
     // Double value of remaining piece
-    let newValue = pieces[0].dataset.value *= 2
-    pieces[0].dataset.value = newValue
-    $(pieces[0]).addClass(`v${newValue}`)
+    let newValue = gameArray[row][column] * 2
+    pieces[0].classList.replace(`v${newValue / 2}`, `v${newValue}`)
     $(pieces[0]).text(newValue)
     gameArray[row][column] = newValue
 }
@@ -108,7 +100,6 @@ function moveLeft() {
 
             if (gameArray[r][c] > 0) { // Find the leftmost piece
                 let pieceToMove = pieceAtPosition(r, c)
-                console.log(pieceToMove)
                 let lookingForWhereToGo = true;
                 let delta = 1;
 

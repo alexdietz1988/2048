@@ -1,6 +1,4 @@
-* {
-    box-sizing: border-box;
-}
+* {box-sizing: border-box;}
 
 .gameboard {
     font-size: 0;
@@ -29,9 +27,7 @@
     left: 200px;
 }
 
-button {
-    font-size: 16px;
-}
+button {font-size: 16px;}
 
 .v2 {background-color: gray}
 .v4 {background-color: yellow}
