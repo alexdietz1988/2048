@@ -137,43 +137,44 @@ function moveRight() {
 function moveUp() {
 
     for (let c = 0; c < 4; c++) { // Look at each column
+        console.log(`looking at column ${c}`)
         for (let r = 1; r < 4; r++) { // Look at the bottom three rows
 
-            if (gameArray[r][c] > 0) { // Find the top piece
+            if (gameArray[r][c] > 0) { // Find the uppermost piece
                 let pieceToMove = pieceAtPosition(r, c)[0]
                 let lookingForWhereToGo = true;
                 let delta = 1;
-                console.log(r,c)
 
                 while (lookingForWhereToGo) {
 
-                    if (r - delta < 0) { // If you've reached the end of the board, move there
-                        positionPiece(pieceToMove, r - delta + 1, c)
+                    if (r - delta < 0) {
+                        console.log('I have reached the end of the board')
+                        positionPiece(pieceToMove, r - delta + 1, c) // If you've reached the end of the board, locate at next square
                         gameArray[r - delta + 1][c] = Number(pieceToMove.textContent)
                         lookingForWhereToGo = false
 
-                    } else if (gameArray[r - delta][c] === gameArray[r][c]) { // If you've reached a piece of the same value, combine
-                        positionPiece(pieceToMove, r - delta, c)
-                        combinePiecesAt(r - delta, c)
-                        lookingForWhereToGo = false
-                        
-                    } else if (gameArray[r - delta][c] === 0) {
-                        console.log('moving up')
-                        delta++ // If the square above it is empty, keep looking up
-                    
-                    } else {
-                        positionPiece(pieceToMove, r - delta + 1, c) // Move to next position if different value
-                        gameArray[r - delta][c + 1] = Number(pieceToMove.textContent)
-                        lookingForWhereToGo = false
-                    }
-                }
-                gameArray[r][c] = 0
+                    } else if (gameArray[r - delta][c] === 0) { // If you've reached an empty square, keep looking up
+                        console.log('I will keep looking up')
+                        delta++ 
 
-                    
-            }
-        }
-    }
-    // newPiece()
+                    } else if (gameArray[r - delta][c] > 0) { // If you've reached a non-empty square...
+                        console.log('I have reached a non-empty square')
+                        
+                        if (gameArray[r - delta][c] === gameArray[r][c]) { // Move to that position if same value
+                            positionPiece(pieceToMove, r - delta, c) 
+                            combinePiecesAt(r - delta, c)
+                            gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
+                            
+                        } else {
+                            positionPiece(pieceToMove, r - delta + 1, c) // Locate at next position if end of board or different value
+                            gameArray[r - delta + 1][c] = Number(pieceToMove.textContent)
+                            if (r - delta + 1 !== r) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
+                        }
+
+                        lookingForWhereToGo = false
+        }}}}}
+
+    newPiece()
 }
 
 
