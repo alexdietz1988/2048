@@ -92,9 +92,40 @@ function moveLeft() {
                     gameArray[r][c] = 0
                     lookingForWhereToGo = false
         }}}}}
+
+    newPiece()
+}
+
+function moveRight() {
+
+    for (let r = 0; r < 4; r++) { // Look at each row
+        for (let c = 2; c > -1; c--) { // Look at the first three columns, starting from the right
+
+            if (gameArray[r][c] > 0) { // Find the rightmost piece
+                let pieceToMove = pieceAtPosition(r, c)[0]
+                let lookingForWhereToGo = true;
+                let delta = 1;
+
+                while (lookingForWhereToGo) {
+                    if (gameArray[r][c + delta] === 0) delta++ // If the square is empty, look to its right
+                    else if (gameArray[r][c + delta] !== 0) { // Once you find a non-empty square or the end of the board...
+                        
+                        if (gameArray[r][c + delta] === gameArray[r][c]) {
+                            positionPiece(pieceToMove, r, c + delta) // Move to that position if same value
+                            combinePiecesAt(r, c + delta)
+                            
+                        } else {
+                            positionPiece(pieceToMove, r, c + delta - 1) // Move to next position if different value
+                            gameArray[r][c + delta - 1] = Number(pieceToMove.textContent)
+                        }
+                    gameArray[r][c] = 0
+                    lookingForWhereToGo = false
+        }}}}}
         
     newPiece()
 }
+
+
 
 // TEST PIECE
 // let $testPiece = $('<div class="square piece">2</div>')
@@ -116,6 +147,7 @@ function combinePiecesAt(row, column) {
 
 // 2. In my HTML and CSS, I'll create a button to move pieces left. In my JavaScript, I'll grab it and give it an event listener so that clicking it will call the "move left" function.
 $('.left').on('click', moveLeft)
+$('.right').on('click', moveRight)
 
 // 3. For the case where a piece moves to the square held by a piece of the same value, I'll create a function to remove both pieces and replace them with a piece of the appropriate value.
 // 4. I'll create similar functions and buttons for moving right, up, or down.
