@@ -40,11 +40,15 @@ function positionPiece(piece, row, column) {
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece = $('<div class="square piece">2</div>')
+    let $newPiece = $('<div class="square piece" data-value="2" data-row="" data-column="">2</div>')
     let position = [...randomOpenIndex()]
+    let newRow = position[0]
+    let newColumn = position[1]
     $('.gameboard').prepend($newPiece)
-    positionPiece($newPiece, ...position)
-    gameArray[position[0]][position[1]] = 2
+    positionPiece($newPiece, newRow, newColumn)
+    $newPiece.data().row = newRow
+    $newPiece.data().column = newColumn
+    gameArray[newRow][newColumn] = $newPiece.data().value
 }
 
 // Call newPiece() twice to generate the first two pieces
@@ -54,24 +58,26 @@ newPiece(); newPiece()
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
 
 // Find piece at position
-function pieceAtPosition(row, column) {
-    let pieces = document.querySelectorAll('.piece')
-    let mysteryPieces = [];
+// function pieceAtPosition(row, column) {
+//     let pieces = document.querySelectorAll('.piece')
+//     let mysteryPieces = [];
 
-    pieces.forEach( (piece, idx) => {
-        if (pieces[idx].style.top === `${row * 100}px` && pieces[idx].style.left === `${column * 100}px`) {
-            mysteryPieces.push(pieces[idx])
-            }
-    }
-    )
-    return mysteryPieces
-}
+//     pieces.forEach( (piece, idx) => {
+//         if (pieces[idx].style.top === `${row * 100}px` && pieces[idx].style.left === `${column * 100}px`) {
+//             mysteryPieces.push(pieces[idx])
+//             }
+//     }
+//     )
+//     return mysteryPieces
+// }
 
 function combinePiecesAt(row, column) {
     let pieces = pieceAtPosition(row, column)
+    console.log(pieces)
     pieces[1].remove() // Remove one of the pieces
     pieces[0].textContent = (2 * Number(pieces[0].textContent)) // Double value of remaining piece
     gameArray[row][column] = Number(pieces[0].textContent) // 
+    console.table(gameArray)
 }
 
 function moveLeft() {
@@ -95,7 +101,7 @@ function moveLeft() {
                             
                         } else {
                             positionPiece(pieceToMove, r, c - delta + 1) // Locate at next position if end of board or different value
-                            gameArray[r][c - delta + 1] = Number(pieceToMove.textContent)
+                            gameArray[r][c - delta + 1] = pieceToMove.data().value
                             if (c - delta + 1 !== c) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
                         }
                     lookingForWhereToGo = false
@@ -137,11 +143,12 @@ function moveRight() {
 function moveUp() {
 
     for (let c = 0; c < 4; c++) { // Look at each column
-        console.log(`looking at column ${c}`)
+        console.log(`Looking at column ${c}`)
         for (let r = 1; r < 4; r++) { // Look at the bottom three rows
 
             if (gameArray[r][c] > 0) { // Find the uppermost piece
                 let pieceToMove = pieceAtPosition(r, c)[0]
+                console.log(`Looking at the piece at ${r}, ${c}`)
                 let lookingForWhereToGo = true;
                 let delta = 1;
 
@@ -162,13 +169,17 @@ function moveUp() {
                         
                         if (gameArray[r - delta][c] === gameArray[r][c]) { // Move to that position if same value
                             positionPiece(pieceToMove, r - delta, c) 
+                            console.log('I am going to combine pieces')
                             combinePiecesAt(r - delta, c)
                             gameArray[r][c] = 0 // Update the gameArray to reflect that the piece has moved
                             
                         } else {
                             positionPiece(pieceToMove, r - delta + 1, c) // Locate at next position if end of board or different value
                             gameArray[r - delta + 1][c] = Number(pieceToMove.textContent)
-                            if (r - delta + 1 !== r) gameArray[r][c] = 0 // Update the gameArray if the piece has changed position
+                            if (r - delta + 1 !== r) {
+                                console.log ('I am going to move the piece')
+                                gameArray[r][c] = 0
+                            } // Update the gameArray if the piece has changed position
                         }
 
                         lookingForWhereToGo = false
