@@ -247,15 +247,15 @@ function newPiece() {
 newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
 // TEST PIECES
-let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
- $('.gameboard').prepend($testPiece)
-positionPiece($testPiece, 3,0)
-gameArray[3][0] = 1024
+// let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
+//  $('.gameboard').prepend($testPiece)
+// positionPiece($testPiece, 3,0)
+// gameArray[3][0] = 1024
 
-let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
-$('.gameboard').prepend($testPiece2)
-positionPiece($testPiece2, 3,1)
-gameArray[3][1] = 1024
+// let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
+// $('.gameboard').prepend($testPiece2)
+// positionPiece($testPiece2, 3,1)
+// gameArray[3][1] = 1024
 
 // let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
 // $('.gameboard').prepend($testPiece3)
