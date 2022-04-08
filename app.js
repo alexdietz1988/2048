@@ -16,12 +16,12 @@ let gameArray = [
 ]
 
 document.addEventListener('keydown', (e) => {
-    if (gameActive) {
-        if (e.code === 'ArrowLeft') moveLeft()
-        else if (e.code === 'ArrowRight') moveRight()
-        else if (e.code === 'ArrowUp') moveUp()
-        else if (e.code === 'ArrowDown') moveDown()
-    }
+    if (gameActive === false) keepPlaying()
+
+    if (e.code === 'ArrowLeft') moveLeft()
+    else if (e.code === 'ArrowRight') moveRight()
+    else if (e.code === 'ArrowUp') moveUp()
+    else if (e.code === 'ArrowDown') moveDown()
 })
 
 // GENERAL-PURPOSE FUNCTIONS
@@ -310,23 +310,11 @@ function checkForLoss() {
 }
 
 function youWin() {
-    console.log('youWin has been called')
     gameActive = false
     $('.message').text('You win!')
+    $('.message').after('<h4>Keep playing as long as you like!</h4>')
     wins++
     $('.winLossCount').text(`Wins: ${wins} | Losses: ${losses}`)
-
-    $('.buttons').append($('<button type="submit" class="keepPlaying btn btn-primary">Keep playing</button>')).css('text-align', 'center')
-    
-    myModal.show()
-
-    $('.keepPlaying').on('click', () => {
-        gameActive = true
-        initialGame = false
-        $('.message').text('Use the arrow keys to move')
-        newPiece()
-        $('.keepPlaying').remove()
-})
 }
 
 function youLose() {
@@ -336,4 +324,8 @@ function youLose() {
     $('.winLossCount').text(`Wins: ${wins} | Losses: ${losses}`)
 }
 
-let myModal = new bootstrap.Modal(document.getElementById('myModal'))
+function keepPlaying() {
+    gameActive = true
+    initialGame = false
+    newPiece()
+}
