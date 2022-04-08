@@ -214,15 +214,18 @@ function randomOpenIndex() {
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece = $('<div class="square piece v2">2</div>')
-    $('.gameboard').prepend($newPiece)
-
+    let $newPiece = $('<div class="square piece v2" display=none>2</div>').css('display', 'none')
     let position = randomOpenIndex()
     let row = position[0]
     let column = position[1]
     positionPiece($newPiece[0], row, column)
     $newPiece.addClass(`r${row}c${column}`)
     gameArray[row][column] = 2
+
+    $('.gameboard').prepend($newPiece)
+    $newPiece.fadeIn(1000, function() {
+        // FadeIn complete
+    })
 }
 
 newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
