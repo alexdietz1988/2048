@@ -8,6 +8,8 @@ let gameArray = [
     [0, 0, 0, 0],
 ]
 
+let lookingForWhereToGo;
+
 // Find a random open index on gameArray
 function randomOpenIndex() {
 
@@ -78,6 +80,7 @@ function newPiece() {
 // 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
 
 function move (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
+    lookingForWhereToGo = false
     pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
     gameArray[newRow][newColumn] = gameArray[oldRow][oldColumn]
     gameArray[oldRow][oldColumn] = 0
@@ -85,7 +88,7 @@ function move (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 }
 
 function combine (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
-    console.table(gameArray)
+    lookingForWhereToGo = false
 
     // Remove the existing piece
     let existingPiece = document.querySelector(`.r${newRow}c${newColumn}`)
@@ -108,21 +111,19 @@ function moveLeft() {
     for (let r = 0; r < 4; r++) { // Look at each row
         for (let c = 1; c < 4; c++) { // Look at the latter three columns
 
-            if (gameArray[r][c] > 0) { // Find the leftmost piece
+            if (gameArray[r][c] > 0) { // Find the leftmost piece that's potentially moveable
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
-                let lookingForWhereToGo = true;
+                lookingForWhereToGo = true;
 
-                for (let delta = 1; c - delta >= 0 && lookingForWhereToGo; delta++) { // Start looking to its left...
+                for (let delta = 1; c - delta > -2 && lookingForWhereToGo; delta++) { // Start looking to its left...
 
                     // If you find a piece of the same value, combine them
                     if (gameArray[r][c - delta] === gameArray[r][c]) { 
                         combine(pieceToMove, r, c, r, c - delta)
-                        lookingForWhereToGo = false
                     
                     // If you find a piece of a different value, or the end of the board, move next to it if possible
-                    } else if ((gameArray[r][c - delta] > 0 || c - delta === 0) && delta > 1) {
+                    } else if ((gameArray[r][c - delta] > 0 || c - delta < 0) && delta > 1) {
                         move(pieceToMove, r, c, r, c - delta + 1)
-                        lookingForWhereToGo = false
                     }
                 }
             }
@@ -136,25 +137,24 @@ function moveRight() {
     for (let r = 0; r < 4; r++) { // Look at each row
         for (let c = 2; c > -1; c--) { // Look at the first three columns, starting from the right
 
-            if (gameArray[r][c] > 0) { // Find the rightmost piece
+            if (gameArray[r][c] > 0) { // Find the rightmost piece that's potentially moveable
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
-                let lookingForWhereToGo = true;
-                let delta = 1;
+                lookingForWhereToGo = true;
 
-                while (lookingForWhereToGo) {
-                    if (gameArray[r][c + delta] === 0) delta++ // If the square to its right is empty, keep looking right
-                    else if (c + delta > 3 || gameArray[r][c + delta] !== 0) { // Once you find the end of the board or a non-empty square...
-                        
-                        if (gameArray[r][c + delta] === gameArray[r][c]) { // Combine pieces at that position if same value
-                            combine (pieceToMove, r, c, r, c + delta)
-                            
-                        } else if (c + delta - 1 !== c) { // If different value or end of board, move to next square
-                            move(pieceToMove, r, c, r, c + delta - 1)
-                        }
-                        
-                    lookingForWhereToGo = false
-        }}}}}
-        
+                for (let delta = 1; c + delta < 5 && lookingForWhereToGo; delta ++) { // Start looking to its right...
+
+                    // If you find a piece of the same value, combine them
+                    if (gameArray[r][c + delta] === gameArray[r][c]) { 
+                        combine (pieceToMove, r, c, r, c + delta)
+                    
+                    // If you find a piece of a different value, or the end of the board, move next to it if possible
+                    } else if ((gameArray[r][c + delta] > 0 || c + delta > 3) && delta > 1) {
+                        move(pieceToMove, r, c, r, c + delta - 1)
+                    }
+                }   
+            }
+        }
+    }
     newPiece()
 }
 
@@ -163,33 +163,24 @@ function moveUp() {
     for (let c = 0; c < 4; c++) { // Look at each column
         for (let r = 1; r < 4; r++) { // Look at the bottom three rows
 
-            if (gameArray[r][c] > 0) { // Find the uppermost piece
+            if (gameArray[r][c] > 0) { // Find the uppermost piece that's potentially moveable
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
-                let lookingForWhereToGo = true;
-                let delta = 1;
+                lookingForWhereToGo = true;
 
-                while (lookingForWhereToGo) {
+                for (let delta = 1; r - delta > -2 && lookingForWhereToGo; delta++) {
 
-                    if (r - delta < 0) { // If you've reached the end of the board, locate at next square
-                        move(pieceToMove, r, c, r - delta + 1, c)
-                        lookingForWhereToGo = false
-
-                    } else if (gameArray[r - delta][c] === 0) { // If you've reached an empty square, keep looking up
-                        delta++ 
-
-                    } else if (gameArray[r - delta][c] > 0) { // If you've reached a non-empty square...
-                        
-                        if (gameArray[r - delta][c] === gameArray[r][c]) { // If same value, combine at that position
-                            combine(pieceToMove, r, c, r - delta, c)
-                            
-                        } else if (r - delta + 1 !== r) {
-                            move(pieceToMove, r, c, r - delta + 1, c)
-                        }
-                        lookingForWhereToGo = false
-                    }
+                    // If you find a piece of the same value, combine them
+                    if (gameArray[r - delta][c] === gameArray[r][c]) {
+                        combine(pieceToMove, r, c, r - delta, c)
                     
-        }}}}
-
+                    // If you find a piece of a different value, or the end of the board, move next to it if possible
+                    } else if ((gameArray[r - delta][c] > 0 || r - delta < 0) && delta > 1) {
+                        move(pieceToMove, r, c, r - delta + 1, c)
+                    }
+                }
+            }
+        }
+    }
     newPiece()
 }
 
@@ -198,33 +189,24 @@ function moveDown() {
     for (let c = 0; c < 4; c++) { // Look at each column
         for (let r = 0; r < 3; r++) { // Look at the top three rows
 
-            if (gameArray[r][c] > 0) { // Find the bottommost piece
+            if (gameArray[r][c] > 0) { // Find the lowermost piece that's potentially moveable
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
-                let pieceValue = gameArray[r][c]
-                let lookingForWhereToGo = true;
-                let delta = 1;
+                lookingForWhereToGo = true;
 
-                while (lookingForWhereToGo) {
+                for (let delta = 1; r + delta < 5 && lookingForWhereToGo; delta++) {
 
-                    if (r + delta > 3) { // If you've reached the end of the board, locate at next square
+                    // If you find a piece of the same value, combine them
+                    if (gameArray[r + delta][c] === gameArray[r][c]) {
+                        combine(r, c, r + delta, c)
+                    
+                    // If you find a piece of a different value, or the end of the board, move next to it if possible
+                    } else if ((gameArray[r + delta][c] > 0 || r + delta > 3) && delta > 1) {
                         move(pieceToMove, r, c, r + delta - 1, c)
-                        lookingForWhereToGo = false
-
-                    } else if (gameArray[r + delta][c] === 0) { // If you've reached an empty square, keep looking down
-                        delta++ 
-
-                    } else if (gameArray[r + delta][c] > 0) { // If you've reached a non-empty square...
-                        
-                        if (gameArray[r + delta][c] === gameArray[r][c]) { // If same value, combine at that position
-                            combine(r, c, r + delta, c)
-                            
-                        } else if (r + delta - 1 !== r) { // Locate at next position if end of board or different value
-                            move(pieceToMove, r, c, r + delta - 1, c)
-                        }
-                        lookingForWhereToGo = false
                     }
-        }}}}
-
+                }
+            }
+        }
+    }
     newPiece()
 }
 
