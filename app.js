@@ -30,8 +30,6 @@ function move(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     gameArray[newRow][newColumn] = gameArray[oldRow][oldColumn]
     gameArray[oldRow][oldColumn] = 0
     positionPiece(pieceToMove, newRow, newColumn)
-
-    checkScore()
 }
 
 function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
@@ -51,25 +49,7 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     pieceToMove.classList.replace(`v${newValue / 2}`, `v${newValue}`)
     $(pieceToMove).text(newValue)
     gameArray[newRow][newColumn] = newValue
-
-    checkScore()
 }
-
-// TEST PIECES
-let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
- $('.gameboard').prepend($testPiece)
-positionPiece($testPiece, 3,0)
-gameArray[3][0] = 1024
-
-let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
-$('.gameboard').prepend($testPiece2)
-positionPiece($testPiece2, 3,1)
-gameArray[3][1] = 1024
-
-// let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
-// $('.gameboard').prepend($testPiece3)
-// positionPiece($testPiece3, 3,2)
-// gameArray[3][2] = 2
 
 // FUNCTIONS TO MOVE IN EACH DIRECTION
 
@@ -105,6 +85,7 @@ function moveLeft() {
         }
     }
     checkScore()
+    newPiece()
 }
 
 function moveRight() {
@@ -137,6 +118,7 @@ function moveRight() {
         }
     }
     checkScore()
+    if (gameActive) newPiece()
 }
 
 function moveUp() {
@@ -171,6 +153,7 @@ function moveUp() {
         }
     }
     checkScore()
+    if (gameActive) newPiece()
 }
 
 function moveDown() {
@@ -202,6 +185,7 @@ function moveDown() {
         }
     }
     checkScore()
+    if (gameActive) newPiece()
 }
 
 // NEW PIECE
@@ -243,7 +227,23 @@ function newPiece() {
     })
 }
 
-// newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+
+// TEST PIECES
+// let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
+//  $('.gameboard').prepend($testPiece)
+// positionPiece($testPiece, 3,0)
+// gameArray[3][0] = 1024
+
+// let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
+// $('.gameboard').prepend($testPiece2)
+// positionPiece($testPiece2, 3,1)
+// gameArray[3][1] = 1024
+
+// let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
+// $('.gameboard').prepend($testPiece3)
+// positionPiece($testPiece3, 3,2)
+// gameArray[3][2] = 2
 
 // ENDGAME
 $('.reset').on('click', reset)
@@ -256,17 +256,25 @@ function reset() {
         [0,0,0,0],
         [0,0,0,0],
     ]
+    gameActive = true
     newPiece(); newPiece();
 }
 
 function checkScore() {
-    gameArray.forEach(function (row) {
-        row.forEach(element => {
-            if (element === 2048) youWin()
-            })
-        }
-    )
+    let noWinFound = true
 
+    for (let r = 0; r < 4 && noWinFound; r++) {
+        for (let c = 0; c < 4 && noWinFound; c++) {
+            if (gameArray[r][c] === 2048) {
+                youWin()
+                noWinFound = false;
+            }
+        }
+    }
+    if (noWinFound) checkForLoss()
+}
+
+function checkForLoss() {
     let lossPossible = true;
     for (r = 0; r < 4 && lossPossible; r++) { // Look at each row
         for (c = 0; c < 4 && lossPossible; c++) { // Look at each column
@@ -282,27 +290,27 @@ function checkScore() {
         }
     }
     if (lossPossible) youLose()
-
-    if (gameActive) newPiece()
 }
 
 function youWin() {
-    endgame()
+    console.log('youWin has been called')
+    gameActive = false
     $('.message').text('You win!')
+
+    $('footer').prepend($('<button type="submit" class="keepPlaying">Keep playing</button>'))
+    
+    $('.keepPlaying').on('click', () => {
+        gameActive = true
+        $('.message').text('Use the arrow keys to move')
+})
 }
 
 function youLose() {
-    endgame()
+    gameActive = false
     $('.message').text('You lose!')
 }
 
-function endgame() {
-    gameActive = false
-}
+
 
 // LATER
-    // 6. (Stretch) I may write code to keep track of the current score, high score, and win/loss count.
-
-    // ### Endgame
-    // 1. I'll create functions to check the gameboard array after each move for a win or loss. If it finds one, it will end the game and display an appropriate message.
-    // 2. I'll create a reset button to reset the gameboard.
+// (Stretch) I may write code to keep track of the current score, high score, and win/loss count.
