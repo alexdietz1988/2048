@@ -1,4 +1,5 @@
-// ### Initializing the gameboard
+// GENERAL-PURPOSE GAME OBJECTS
+let lookingForWhereToGo;
 
 // Array representing the values at each square
 let gameArray = [
@@ -8,77 +9,14 @@ let gameArray = [
     [0, 0, 0, 0],
 ]
 
-let lookingForWhereToGo;
+// Move buttons
+$('.left').on('click', moveLeft)
+$('.right').on('click', moveRight)
+$('.up').on('click', moveUp)
+$('.down').on('click', moveDown)
 
-// Find a random open index on gameArray
-function randomOpenIndex() {
 
-    let row;
-    let column;
-    let lookingForOpenRow = true;
-    let lookingForOpenColumn = true;
-
-    // Find a random row that contains a 0
-    while (lookingForOpenRow) {
-        row = Math.floor(Math.random() * 4); // Generate a random number between 0 and 3 (inclusive)
-        if (gameArray[row].some(element => element === 0)) lookingForOpenRow = false
-    }
-
-    // Find a random element in that row equal to 0
-    while (lookingForOpenColumn) {
-        column = Math.floor(Math.random() * 4); // Generate a random number between 0 and 3 (inclusive)
-        if (gameArray[row][column] === 0) lookingForOpenColumn = false
-    }
-
-    return [row, column];
-}
-
-// Call newPiece() twice to generate the first two pieces
-newPiece()
-newPiece()
-
-// Use an index on the gameboard array to position an element
-function positionPiece(piece, row, column) {
-    $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
-}
-
-// Generate a new piece at a random open square
-function newPiece() {
-    let $newPiece = $('<div class="square piece v2">2</div>')
-    $('.gameboard').prepend($newPiece)
-
-    let row = [...randomOpenIndex()][0]
-    let column = [...randomOpenIndex()][1]
-    positionPiece($newPiece[0], row, column)
-    $newPiece.addClass(`r${row}c${column}`)
-    gameArray[row][column] = 2
-}
-
-// TEST PIECES
-    // let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
-    // $('.gameboard').prepend($testPiece)
-    // positionPiece($testPiece, 1,1)
-    // $testPiece[0].dataset.position = '1,1'
-    // gameArray[1][1] = 2
-
-    // let $testPiece2 = $('<div class="square piece" data-value="2" data-position=""">2</div>')
-    // $('.gameboard').prepend($testPiece2)
-    // positionPiece($testPiece2, 1,3)
-    // $testPiece2[0].dataset.position = '1,3'
-    // gameArray[1][3] = 2
-
-    // let $testPiece3 = $('<div class="square piece" data-value="2" data-position="">2</div>')
-    // $('.gameboard').prepend($testPiece3)
-    // positionPiece($testPiece3, 1,1)
-    // $testPiece3[0].dataset.position = '1,1'
-    // gameArray[1][1] = 2
-
-    // let pieces = document.querySelectorAll(`[data-position="1,1"]`)
-    // console.log(pieces)
-
-// ### Moving pieces
-// 1. I'll create a function to move pieces left. This will take the leftmost element in each row and start looking to its left until it finds (a) the end of the row, (b) an element of a different value, or (c) an element of the same value. It will give the index that the element should be "moved" to, and will call the function in (4) above using that index to move the actual piece, and will also update the gameboard array appropriately. The function will then do the same thing with the next-to-leftmost element in each row, and so on. Finally, it will call the functions to randomly generate a new piece.
-
+// GENERAL-PURPOSE FUNCTIONS
 function move (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     lookingForWhereToGo = false
     pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
@@ -106,6 +44,34 @@ function combine (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     gameArray[newRow][newColumn] = newValue
 }
 
+// TEST PIECES
+    // let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
+    // $('.gameboard').prepend($testPiece)
+    // positionPiece($testPiece, 1,1)
+    // $testPiece[0].dataset.position = '1,1'
+    // gameArray[1][1] = 2
+
+    // let $testPiece2 = $('<div class="square piece" data-value="2" data-position=""">2</div>')
+    // $('.gameboard').prepend($testPiece2)
+    // positionPiece($testPiece2, 1,3)
+    // $testPiece2[0].dataset.position = '1,3'
+    // gameArray[1][3] = 2
+
+    // let $testPiece3 = $('<div class="square piece" data-value="2" data-position="">2</div>')
+    // $('.gameboard').prepend($testPiece3)
+    // positionPiece($testPiece3, 1,1)
+    // $testPiece3[0].dataset.position = '1,1'
+    // gameArray[1][1] = 2
+
+    // let pieces = document.querySelectorAll(`[data-position="1,1"]`)
+    // console.log(pieces)
+
+// Use an index on the gameboard array to position an element
+function positionPiece(piece, row, column) {
+    $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
+}
+
+// FUNCTIONS TO MOVE IN EACH DIRECTION
 function moveLeft() {
 
     for (let r = 0; r < 4; r++) { // Look at each row
@@ -210,17 +176,49 @@ function moveDown() {
     newPiece()
 }
 
-// 2. In my HTML and CSS, I'll create a button to move pieces left. In my JavaScript, I'll grab it and give it an event listener so that clicking it will call the "move left" function.
-$('.left').on('click', moveLeft)
-$('.right').on('click', moveRight)
-$('.up').on('click', moveUp)
-$('.down').on('click', moveDown)
+// INITIALIZE THE GAMEBOARD
+// Find a random open index on gameArray
+function randomOpenIndex() {
 
-// 3. For the case where a piece moves to the square held by a piece of the same value, I'll create a function to remove both pieces and replace them with a piece of the appropriate value.
-// 4. I'll create similar functions and buttons for moving right, up, or down.
-// 5. (Stretch) I may try writing event listeners to allow the user to move the pieces by using their arrow keys.
-// 6. (Stretch) I may write code to keep track of the current score, high score, and win/loss count.
+    let row;
+    let column;
+    let lookingForOpenRow = true;
+    let lookingForOpenColumn = true;
 
-// ### Endgame
-// 1. I'll create functions to check the gameboard array after each move for a win or loss. If it finds one, it will end the game and display an appropriate message.
-// 2. I'll create a reset button to reset the gameboard.
+    // Find a random row that contains a 0
+    while (lookingForOpenRow) {
+        row = Math.floor(Math.random() * 4); // Generate a random number between 0 and 3 (inclusive)
+        if (gameArray[row].some(element => element === 0)) lookingForOpenRow = false
+    }
+
+    // Find a random element in that row equal to 0
+    while (lookingForOpenColumn) {
+        column = Math.floor(Math.random() * 4); // Generate a random number between 0 and 3 (inclusive)
+        if (gameArray[row][column] === 0) lookingForOpenColumn = false
+    }
+
+    return [row, column];
+}
+
+// Generate a new piece at a random open square
+function newPiece() {
+    let $newPiece = $('<div class="square piece v2">2</div>')
+    $('.gameboard').prepend($newPiece)
+
+    let position = randomOpenIndex()
+    let row = position[0]
+    let column = position[1]
+    positionPiece($newPiece[0], row, column)
+    $newPiece.addClass(`r${row}c${column}`)
+    gameArray[row][column] = 2
+}
+
+newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+
+// LATER
+    // 5. (Stretch) I may try writing event listeners to allow the user to move the pieces by using their arrow keys.
+    // 6. (Stretch) I may write code to keep track of the current score, high score, and win/loss count.
+
+    // ### Endgame
+    // 1. I'll create functions to check the gameboard array after each move for a win or loss. If it finds one, it will end the game and display an appropriate message.
+    // 2. I'll create a reset button to reset the gameboard.
