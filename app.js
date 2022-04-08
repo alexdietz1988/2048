@@ -4,6 +4,8 @@ let gameActive = true;
 let initialGame = true;
 let wins = 0;
 let losses = 0;
+let currentScore = 0
+let highScore = 0
 
 // Array representing the values at each square
 let gameArray = [
@@ -52,6 +54,10 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     pieceToMove.classList.replace(`v${newValue / 2}`, `v${newValue}`)
     $(pieceToMove).text(newValue)
     gameArray[newRow][newColumn] = newValue
+
+    currentScore += newValue
+    if (currentScore > highScore) highScore = currentScore
+    $('.scoreboard').text(`Current Score: ${currentScore} | High Score: ${highScore}`)
 }
 
 // FUNCTIONS TO MOVE IN EACH DIRECTION
@@ -230,18 +236,18 @@ function newPiece() {
     })
 }
 
-// newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
 // TEST PIECES
-let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
- $('.gameboard').prepend($testPiece)
-positionPiece($testPiece, 3,0)
-gameArray[3][0] = 1024
+// let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
+//  $('.gameboard').prepend($testPiece)
+// positionPiece($testPiece, 3,0)
+// gameArray[3][0] = 1024
 
-let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
-$('.gameboard').prepend($testPiece2)
-positionPiece($testPiece2, 3,1)
-gameArray[3][1] = 1024
+// let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
+// $('.gameboard').prepend($testPiece2)
+// positionPiece($testPiece2, 3,1)
+// gameArray[3][1] = 1024
 
 // let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
 // $('.gameboard').prepend($testPiece3)
@@ -300,7 +306,7 @@ function youWin() {
     gameActive = false
     $('.message').text('You win!')
     wins++
-    $('.scoreboard').text(`Wins: ${wins} | Losses: ${losses}`)
+    $('.winLossCount').text(`Wins: ${wins} | Losses: ${losses}`)
 
     $('.buttons').append($('<button type="submit" class="keepPlaying">Keep playing</button>')).css('text-align', 'center')
     
@@ -317,8 +323,5 @@ function youLose() {
     gameActive = false
     $('.message').text('You lose!')
     losses++
-    $('.scoreboard').text(`Wins: ${wins} | Losses: ${losses}`)
+    $('.winLossCount').text(`Wins: ${wins} | Losses: ${losses}`)
 }
-
-// LATER
-// (Stretch) I may write code to keep track of the current score, high score, and win/loss count.
