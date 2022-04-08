@@ -9,11 +9,13 @@ let gameArray = [
     [0, 0, 0, 0],
 ]
 
-// Move buttons
-$('.left').on('click', moveLeft)
-$('.right').on('click', moveRight)
-$('.up').on('click', moveUp)
-$('.down').on('click', moveDown)
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'ArrowLeft') moveLeft()
+    else if (e.code === 'ArrowRight') moveRight()
+    else if (e.code === 'ArrowUp') moveUp()
+    else if (e.code === 'ArrowDown') moveDown()
+}
+)
 
 // GENERAL-PURPOSE FUNCTIONS
 function positionPiece(piece, row, column) {
@@ -48,20 +50,20 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 }
 
 // TEST PIECES
-let $testPiece = $('<div class="piece v8 r3c0">8</div>')
- $('.gameboard').prepend($testPiece)
-positionPiece($testPiece, 3,0)
-gameArray[3][0] = 8
+// let $testPiece = $('<div class="piece v8 r3c0">8</div>')
+//  $('.gameboard').prepend($testPiece)
+// positionPiece($testPiece, 3,0)
+// gameArray[3][0] = 8
 
-let $testPiece2 = $('<div class="piece v4 r3c1">4</div>')
-$('.gameboard').prepend($testPiece2)
-positionPiece($testPiece2, 3,1)
-gameArray[3][1] = 4
+// let $testPiece2 = $('<div class="piece v4 r3c1">4</div>')
+// $('.gameboard').prepend($testPiece2)
+// positionPiece($testPiece2, 3,1)
+// gameArray[3][1] = 4
 
-let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
-$('.gameboard').prepend($testPiece3)
-positionPiece($testPiece3, 3,2)
-gameArray[3][2] = 2
+// let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
+// $('.gameboard').prepend($testPiece3)
+// positionPiece($testPiece3, 3,2)
+// gameArray[3][2] = 2
 
 // FUNCTIONS TO MOVE IN EACH DIRECTION
 
@@ -244,7 +246,7 @@ function newPiece() {
     })
 }
 
-// newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
 // LATER
     // 5. (Stretch) I may try writing event listeners to allow the user to move the pieces by using their arrow keys.
