@@ -48,20 +48,20 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 }
 
 // TEST PIECES
-let $testPiece = $('<div class="piece v4 r0c0">4</div>')
+let $testPiece = $('<div class="piece v8 r3c0">8</div>')
  $('.gameboard').prepend($testPiece)
-positionPiece($testPiece, 0,0)
-gameArray[0][0] = 4
+positionPiece($testPiece, 3,0)
+gameArray[3][0] = 8
 
-let $testPiece2 = $('<div class="piece v2 r1c0">2</div>')
+let $testPiece2 = $('<div class="piece v4 r3c1">4</div>')
 $('.gameboard').prepend($testPiece2)
-positionPiece($testPiece2, 1,0)
-gameArray[1][0] = 2
+positionPiece($testPiece2, 3,1)
+gameArray[3][1] = 4
 
-let $testPiece3 = $('<div class="piece v2 r2c0">2</div>')
+let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
 $('.gameboard').prepend($testPiece3)
-positionPiece($testPiece3, 2,0)
-gameArray[2][0] = 2
+positionPiece($testPiece3, 3,2)
+gameArray[3][2] = 2
 
 // FUNCTIONS TO MOVE IN EACH DIRECTION
 
@@ -73,20 +73,28 @@ function moveLeft() {
             if (gameArray[r][c] > 0) { // Find the leftmost piece that's potentially moveable
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 lookingForWhereToGo = true;
+                console.log(`looking at the piece at ${r}, ${c}`)
 
                 for (let delta = 1; c - delta > -2 && lookingForWhereToGo; delta++) { // Start looking to its left...
 
                     // If you find the end of the board, move next to it if possible
                     if (c - delta < 0) {
-                        if (delta > 1 && gameArray[r][0] === 0) move(pieceToMove, r, c, r, c - delta + 1)
+                        if (delta > 1 && gameArray[r][0] === 0) {
+                            console.log('gonna try to move to the end of the board')
+                            move(pieceToMove, r, c, r, c - delta + 1)
+                        }
                     
                     // If you find a piece of the same value, combine them
-                    } else if (gameArray[r][c - delta] === gameArray[r][c]) { 
+                    } else if (gameArray[r][c - delta] === gameArray[r][c]) {
+                        console.log(`gonna try to combine with the piece at ${r}, ${c - delta}`)
                         combine(pieceToMove, r, c, r, c - delta)
                     
                     // If you find a piece of a different value, move next to it if possible
                     } else if (gameArray[r][c - delta] > 0) {
-                        if (delta > 1) move(pieceToMove, r, c, r, c - delta + 1)
+                        if (delta > 1 && gameArray[r][c - delta + 1] === 0) {
+                            console.log(`gonna try to move next to the piece at ${r}, ${c - delta}`)
+                            move(pieceToMove, r, c, r, c - delta + 1)
+                        }
                     }
                 }
             }
@@ -116,7 +124,9 @@ function moveRight() {
                     
                     // If you find a piece of a different value, move next to it if possible
                     } else if (gameArray[r][c + delta] > 0) {
-                        if (delta > 1) move(pieceToMove, r, c, r, c + delta - 1)
+                        if (delta > 1 && gameArray[r][c + delta - 1] === 0) {
+                            move(pieceToMove, r, c, r, c + delta - 1)
+                        }
                     }
                 }   
             }
@@ -151,7 +161,7 @@ function moveUp() {
                     
                     // If you find a piece of a different value, move next to it if possible
                     } else if (gameArray[r - delta][c] > 0) {
-                        if (delta > 1) {
+                        if (delta > 1 && gameArray[r - delta + 1][c] === 0) {
                             console.log(`gonna try to move next to the piece at ${r - delta}, ${c}`)
                             move(pieceToMove, r, c, r - delta + 1, c)
                         }
@@ -181,9 +191,11 @@ function moveDown() {
                     } else if (gameArray[r + delta][c] === gameArray[r][c]) {
                         combine(pieceToMove, r, c, r + delta, c)
                     
-                    // If you find a piece of a different value, or the end of the board, move next to it if possible
-                    } else if ((gameArray[r + delta][c] > 0) && delta > 1) {
-                        move(pieceToMove, r, c, r + delta - 1, c)
+                    // If you find a piece of a different value, move next to it if possible
+                    } else if (gameArray[r + delta][c] > 0) {
+                        if (delta > 1 && gameArray[r + delta - 1][c] === 0) {
+                            move(pieceToMove, r, c, r + delta - 1, c)
+                        }
                     }
                 }
             }
