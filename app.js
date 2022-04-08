@@ -27,6 +27,8 @@ function move(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     gameArray[newRow][newColumn] = gameArray[oldRow][oldColumn]
     gameArray[oldRow][oldColumn] = 0
     positionPiece(pieceToMove, newRow, newColumn)
+
+    checkScore()
 }
 
 function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
@@ -46,6 +48,8 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     pieceToMove.classList.replace(`v${newValue / 2}`, `v${newValue}`)
     $(pieceToMove).text(newValue)
     gameArray[newRow][newColumn] = newValue
+
+    checkScore()
 }
 
 // TEST PIECES
@@ -240,7 +244,7 @@ function newPiece() {
     gameArray[row][column] = 2
 
     $('.gameboard').prepend($newPiece)
-    $newPiece.fadeIn(1000, function() {
+    $newPiece.fadeIn(500, function() {
         // FadeIn complete
     })
 }
@@ -259,6 +263,39 @@ function reset() {
         [0,0,0,0],
     ]
     newPiece(); newPiece();
+}
+
+function checkScore() {
+    gameArray.forEach(function (row) {
+        row.forEach(element => {
+            if (element === 2048) youWin()
+            })
+        }
+    )
+
+    let lossPossible = true;
+    for (r = 0; r < 4 && lossPossible; r++) { // Look at each row
+        for (c = 0; c < 4 && lossPossible; c++) { // Look at each column
+            
+            if (gameArray[r][c] === 0) lossPossible = false; // No loss if any square is empty
+            
+            else if (r > 0) { // No loss if there are matching pieces next to each other
+                if (gameArray[r][c] === gameArray[r - 1][c]) lossPossible = false
+            
+            } else if (c > 0) { // No loss if there are matching pieces above/below each other
+                if (gameArray[r][c] === gameArray[r][c - 1]) lossPossible = false
+            }
+        }
+    }
+    if (lossPossible) youLose()
+}
+
+function youWin() {
+    console.log('you win')
+}
+
+function youLose() {
+    console.log('you lose')
 }
 
 // LATER
