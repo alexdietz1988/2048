@@ -222,7 +222,11 @@ function randomOpenIndex() {
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece = $('<div class="piece v2" display=none>2</div>').css('display', 'none')
+    let $newPiece;
+    
+    if (Math.random() < 0.2) $newPiece = $('<div class="piece v4" display=none>4</div>').css('display', 'none')
+    else $newPiece = $('<div class="piece v2" display=none>2</div>').css('display', 'none')
+
     let position = randomOpenIndex()
     let row = position[0]
     let column = position[1]
