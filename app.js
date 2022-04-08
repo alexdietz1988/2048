@@ -1,6 +1,7 @@
 // GENERAL-PURPOSE GAME OBJECTS
 let lookingForWhereToGo;
 let gameActive = true;
+let initialGame = true
 
 // Array representing the values at each square
 let gameArray = [
@@ -84,8 +85,8 @@ function moveLeft() {
             }
         }
     }
-    checkScore()
-    newPiece()
+    if (initialGame) checkScore()
+    if (gameActive) newPiece()
 }
 
 function moveRight() {
@@ -117,7 +118,7 @@ function moveRight() {
             }
         }
     }
-    checkScore()
+    if (initialGame) checkScore()
     if (gameActive) newPiece()
 }
 
@@ -152,7 +153,7 @@ function moveUp() {
             }
         }
     }
-    checkScore()
+    if (initialGame) checkScore()
     if (gameActive) newPiece()
 }
 
@@ -184,7 +185,7 @@ function moveDown() {
             }
         }
     }
-    checkScore()
+    if (initialGame) checkScore()
     if (gameActive) newPiece()
 }
 
@@ -227,18 +228,18 @@ function newPiece() {
     })
 }
 
-newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+// newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
 // TEST PIECES
-// let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
-//  $('.gameboard').prepend($testPiece)
-// positionPiece($testPiece, 3,0)
-// gameArray[3][0] = 1024
+let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
+ $('.gameboard').prepend($testPiece)
+positionPiece($testPiece, 3,0)
+gameArray[3][0] = 1024
 
-// let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
-// $('.gameboard').prepend($testPiece2)
-// positionPiece($testPiece2, 3,1)
-// gameArray[3][1] = 1024
+let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
+$('.gameboard').prepend($testPiece2)
+positionPiece($testPiece2, 3,1)
+gameArray[3][1] = 1024
 
 // let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
 // $('.gameboard').prepend($testPiece3)
@@ -297,11 +298,13 @@ function youWin() {
     gameActive = false
     $('.message').text('You win!')
 
-    $('footer').prepend($('<button type="submit" class="keepPlaying">Keep playing</button>'))
+    $('.buttons').append($('<button type="submit" class="keepPlaying">Keep playing</button>')).css('text-align', 'center')
     
     $('.keepPlaying').on('click', () => {
         gameActive = true
+        initialGame = false
         $('.message').text('Use the arrow keys to move')
+        newPiece()
 })
 }
 
