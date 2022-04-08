@@ -1,5 +1,6 @@
 // GENERAL-PURPOSE GAME OBJECTS
 let lookingForWhereToGo;
+let gameActive = true;
 
 // Array representing the values at each square
 let gameArray = [
@@ -53,15 +54,15 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 }
 
 // TEST PIECES
-// let $testPiece = $('<div class="piece v8 r3c0">8</div>')
-//  $('.gameboard').prepend($testPiece)
-// positionPiece($testPiece, 3,0)
-// gameArray[3][0] = 8
+let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
+ $('.gameboard').prepend($testPiece)
+positionPiece($testPiece, 3,0)
+gameArray[3][0] = 1024
 
-// let $testPiece2 = $('<div class="piece v4 r3c1">4</div>')
-// $('.gameboard').prepend($testPiece2)
-// positionPiece($testPiece2, 3,1)
-// gameArray[3][1] = 4
+let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
+$('.gameboard').prepend($testPiece2)
+positionPiece($testPiece2, 3,1)
+gameArray[3][1] = 1024
 
 // let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
 // $('.gameboard').prepend($testPiece3)
@@ -78,26 +79,22 @@ function moveLeft() {
             if (gameArray[r][c] > 0) { // Find the leftmost piece that's potentially moveable
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 lookingForWhereToGo = true;
-                console.log(`looking at the piece at ${r}, ${c}`)
 
                 for (let delta = 1; c - delta > -2 && lookingForWhereToGo; delta++) { // Start looking to its left...
 
                     // If you find the end of the board, move next to it if possible
                     if (c - delta < 0) {
                         if (delta > 1 && gameArray[r][0] === 0) {
-                            console.log('gonna try to move to the end of the board')
                             move(pieceToMove, r, c, r, c - delta + 1)
                         }
                     
                     // If you find a piece of the same value, combine them
                     } else if (gameArray[r][c - delta] === gameArray[r][c]) {
-                        console.log(`gonna try to combine with the piece at ${r}, ${c - delta}`)
                         combine(pieceToMove, r, c, r, c - delta)
                     
                     // If you find a piece of a different value, move next to it if possible
                     } else if (gameArray[r][c - delta] > 0) {
                         if (delta > 1 && gameArray[r][c - delta + 1] === 0) {
-                            console.log(`gonna try to move next to the piece at ${r}, ${c - delta}`)
                             move(pieceToMove, r, c, r, c - delta + 1)
                         }
                     }
@@ -105,7 +102,7 @@ function moveLeft() {
             }
         }
     }
-    newPiece()
+    checkScore()
 }
 
 function moveRight() {
@@ -137,7 +134,7 @@ function moveRight() {
             }
         }
     }
-    newPiece()
+    checkScore()
 }
 
 function moveUp() {
@@ -148,26 +145,22 @@ function moveUp() {
             if (gameArray[r][c] > 0) { // Find the uppermost piece that's potentially moveable
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 lookingForWhereToGo = true;
-                console.log(`looking at the piece at ${r}, ${c}`)
 
                 for (let delta = 1; r - delta > -2 && lookingForWhereToGo; delta++) {
 
                     // If you find the end of the board, move next to it if possible
                     if (r - delta < 0) {
                         if (delta > 1 && gameArray[0][c] === 0) {
-                            console.log('gonna try to move to the end of the board')
                             move(pieceToMove, r, c, r - delta + 1, c)
                         }
                     
                     // If you find a piece of the same value, combine them
                     } else if (gameArray[r - delta][c] === gameArray[r][c]) {
-                        console.log(`gonna try to combine with the piece at ${r - delta}, ${c}`)
                         combine(pieceToMove, r, c, r - delta, c)
                     
                     // If you find a piece of a different value, move next to it if possible
                     } else if (gameArray[r - delta][c] > 0) {
                         if (delta > 1 && gameArray[r - delta + 1][c] === 0) {
-                            console.log(`gonna try to move next to the piece at ${r - delta}, ${c}`)
                             move(pieceToMove, r, c, r - delta + 1, c)
                         }
                     }
@@ -175,7 +168,7 @@ function moveUp() {
             }
         }
     }
-    newPiece()
+    checkScore()
 }
 
 function moveDown() {
@@ -206,13 +199,12 @@ function moveDown() {
             }
         }
     }
-    newPiece()
+    checkScore()
 }
 
-// INITIALIZE THE GAMEBOARD
+// NEW PIECE
 // Find a random open index on gameArray
 function randomOpenIndex() {
-
     let row;
     let column;
     let lookingForOpenRow = true;
@@ -249,7 +241,7 @@ function newPiece() {
     })
 }
 
-newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+// newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
 // ENDGAME
 $('.reset').on('click', reset)
@@ -288,14 +280,16 @@ function checkScore() {
         }
     }
     if (lossPossible) youLose()
+
+    if (gameActive) newPiece()
 }
 
 function youWin() {
-    console.log('you win')
+    gameActive = false;
 }
 
 function youLose() {
-    console.log('you lose')
+    gameActive = false
 }
 
 // LATER
