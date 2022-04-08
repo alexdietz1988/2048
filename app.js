@@ -223,16 +223,20 @@ function randomOpenIndex() {
 // Generate a new piece at a random open square
 function newPiece() {
     let $newPiece;
+    let value;
     
-    if (Math.random() < 0.2) $newPiece = $('<div class="piece v4" display=none>4</div>').css('display', 'none')
-    else $newPiece = $('<div class="piece v2" display=none>2</div>').css('display', 'none')
+    if (Math.random() < 0.2) value = 4
+    else value = 2
+    
+    $newPiece = $(`<div class="piece v${value}" display=none>${value}</div>`).css('display', 'none')
 
     let position = randomOpenIndex()
     let row = position[0]
     let column = position[1]
+
     positionPiece($newPiece[0], row, column)
     $newPiece.addClass(`r${row}c${column}`)
-    gameArray[row][column] = 2
+    gameArray[row][column] = value
 
     $('.gameboard').prepend($newPiece)
     $newPiece.fadeIn(500, function() {
