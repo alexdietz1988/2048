@@ -15,8 +15,11 @@ $('.right').on('click', moveRight)
 $('.up').on('click', moveUp)
 $('.down').on('click', moveDown)
 
-
 // GENERAL-PURPOSE FUNCTIONS
+function positionPiece(piece, row, column) {
+    $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
+}
+
 function move (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     lookingForWhereToGo = false
     pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
@@ -45,33 +48,26 @@ function combine (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 }
 
 // TEST PIECES
-    // let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
-    // $('.gameboard').prepend($testPiece)
-    // positionPiece($testPiece, 1,1)
-    // $testPiece[0].dataset.position = '1,1'
-    // gameArray[1][1] = 2
+// let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
+ // $('.gameboard').prepend($testPiece)
+// positionPiece($testPiece, 1,1)
+// gameArray[1][1] = 2
 
-    // let $testPiece2 = $('<div class="square piece" data-value="2" data-position=""">2</div>')
-    // $('.gameboard').prepend($testPiece2)
-    // positionPiece($testPiece2, 1,3)
-    // $testPiece2[0].dataset.position = '1,3'
-    // gameArray[1][3] = 2
+// let $testPiece2 = $('<div class="square piece" data-value="2" data-position=""">2</div>')
+// $('.gameboard').prepend($testPiece2)
+// positionPiece($testPiece2, 1,3)
+// gameArray[1][3] = 2
 
-    // let $testPiece3 = $('<div class="square piece" data-value="2" data-position="">2</div>')
-    // $('.gameboard').prepend($testPiece3)
-    // positionPiece($testPiece3, 1,1)
-    // $testPiece3[0].dataset.position = '1,1'
-    // gameArray[1][1] = 2
+// let $testPiece3 = $('<div class="square piece" data-value="2" data-position="">2</div>')
+// $('.gameboard').prepend($testPiece3)
+// positionPiece($testPiece3, 1,1)
+// gameArray[1][1] = 2
 
-    // let pieces = document.querySelectorAll(`[data-position="1,1"]`)
-    // console.log(pieces)
-
-// Use an index on the gameboard array to position an element
-function positionPiece(piece, row, column) {
-    $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
-}
+// let pieces = document.querySelectorAll(`[data-position="1,1"]`)
+// console.log(pieces)
 
 // FUNCTIONS TO MOVE IN EACH DIRECTION
+
 function moveLeft() {
 
     for (let r = 0; r < 4; r++) { // Look at each row
@@ -83,13 +79,17 @@ function moveLeft() {
 
                 for (let delta = 1; c - delta > -2 && lookingForWhereToGo; delta++) { // Start looking to its left...
 
+                    // If you find the end of the board, move next to it if possible
+                    if (c - delta < 0) {
+                        if (delta > 1) move(pieceToMove, r, c, r, c - delta + 1)
+                    
                     // If you find a piece of the same value, combine them
-                    if (gameArray[r][c - delta] === gameArray[r][c]) { 
+                    } else if (gameArray[r][c - delta] === gameArray[r][c]) { 
                         combine(pieceToMove, r, c, r, c - delta)
                     
-                    // If you find a piece of a different value, or the end of the board, move next to it if possible
-                    } else if ((gameArray[r][c - delta] > 0 || c - delta < 0) && delta > 1) {
-                        move(pieceToMove, r, c, r, c - delta + 1)
+                    // If you find a piece of a different value, move next to it if possible
+                    } else if (gameArray[r][c - delta] > 0) {
+                        if (delta > 1) move(pieceToMove, r, c, r, c - delta + 1)
                     }
                 }
             }
@@ -107,15 +107,19 @@ function moveRight() {
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 lookingForWhereToGo = true;
 
-                for (let delta = 1; c + delta < 5 && lookingForWhereToGo; delta ++) { // Start looking to its right...
+                for (let delta = 1; c + delta < 5 && lookingForWhereToGo; delta++) { // Start looking to its right...
 
-                    // If you find a piece of the same value, combine them
-                    if (gameArray[r][c + delta] === gameArray[r][c]) { 
-                        combine (pieceToMove, r, c, r, c + delta)
+                    // If you find the end of the board, move next to it if possible
+                    if (c + delta > 3) {
+                        if (delta > 1) move(pieceToMove, r, c, r, c + delta - 1)
                     
-                    // If you find a piece of a different value, or the end of the board, move next to it if possible
-                    } else if ((gameArray[r][c + delta] > 0 || c + delta > 3) && delta > 1) {
-                        move(pieceToMove, r, c, r, c + delta - 1)
+                    // If you find a piece of the same value, combine them
+                    } else if (gameArray[r][c + delta] === gameArray[r][c]) { 
+                        combine(pieceToMove, r, c, r, c + delta)
+                    
+                    // If you find a piece of a different value, move next to it if possible
+                    } else if (gameArray[r][c + delta] > 0) {
+                        if (delta > 1) move(pieceToMove, r, c, r, c + delta - 1)
                     }
                 }   
             }
@@ -135,13 +139,17 @@ function moveUp() {
 
                 for (let delta = 1; r - delta > -2 && lookingForWhereToGo; delta++) {
 
+                    // If you find the end of the board, move next to it if possible
+                    if (r - delta < 0) {
+                        if (delta > 1) move(pieceToMove, r, c, r - delta + 1, c)
+                    
                     // If you find a piece of the same value, combine them
-                    if (gameArray[r - delta][c] === gameArray[r][c]) {
+                    } else if (gameArray[r - delta][c] === gameArray[r][c]) {
                         combine(pieceToMove, r, c, r - delta, c)
                     
                     // If you find a piece of a different value, or the end of the board, move next to it if possible
-                    } else if ((gameArray[r - delta][c] > 0 || r - delta < 0) && delta > 1) {
-                        move(pieceToMove, r, c, r - delta + 1, c)
+                    } else if (gameArray[r - delta][c] > 0) {
+                        if (delta > 1) move(pieceToMove, r, c, r - delta + 1, c)
                     }
                 }
             }
@@ -161,12 +169,16 @@ function moveDown() {
 
                 for (let delta = 1; r + delta < 5 && lookingForWhereToGo; delta++) {
 
+                    // If you find the end of the board, move next to it if possible
+                    if (r + delta > 3) {
+                        if (delta > 1) move(pieceToMove, r, c, r + delta - 1, c)
+                    
                     // If you find a piece of the same value, combine them
-                    if (gameArray[r + delta][c] === gameArray[r][c]) {
+                    } else if (gameArray[r + delta][c] === gameArray[r][c]) {
                         combine(r, c, r + delta, c)
                     
                     // If you find a piece of a different value, or the end of the board, move next to it if possible
-                    } else if ((gameArray[r + delta][c] > 0 || r + delta > 3) && delta > 1) {
+                    } else if ((gameArray[r + delta][c] > 0) && delta > 1) {
                         move(pieceToMove, r, c, r + delta - 1, c)
                     }
                 }
