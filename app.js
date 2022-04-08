@@ -1,7 +1,9 @@
 // GENERAL-PURPOSE GAME OBJECTS
 let lookingForWhereToGo;
 let gameActive = true;
-let initialGame = true
+let initialGame = true;
+let wins = 0;
+let losses = 0;
 
 // Array representing the values at each square
 let gameArray = [
@@ -297,6 +299,8 @@ function youWin() {
     console.log('youWin has been called')
     gameActive = false
     $('.message').text('You win!')
+    wins++
+    $('.scoreboard').text(`Wins: ${wins} | Losses: ${losses}`)
 
     $('.buttons').append($('<button type="submit" class="keepPlaying">Keep playing</button>')).css('text-align', 'center')
     
@@ -305,15 +309,16 @@ function youWin() {
         initialGame = false
         $('.message').text('Use the arrow keys to move')
         newPiece()
+        $('.keepPlaying').remove()
 })
 }
 
 function youLose() {
     gameActive = false
     $('.message').text('You lose!')
+    losses++
+    $('.scoreboard').text(`Wins: ${wins} | Losses: ${losses}`)
 }
-
-
 
 // LATER
 // (Stretch) I may write code to keep track of the current score, high score, and win/loss count.
