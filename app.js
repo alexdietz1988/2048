@@ -14,8 +14,7 @@ document.addEventListener('keydown', (e) => {
     else if (e.code === 'ArrowRight') moveRight()
     else if (e.code === 'ArrowUp') moveUp()
     else if (e.code === 'ArrowDown') moveDown()
-}
-)
+})
 
 // GENERAL-PURPOSE FUNCTIONS
 function positionPiece(piece, row, column) {
@@ -248,8 +247,21 @@ function newPiece() {
 
 newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
+// ENDGAME
+$('.reset').on('click', reset)
+
+function reset() {
+    $('.piece').remove();
+    gameArray = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+    ]
+    newPiece(); newPiece();
+}
+
 // LATER
-    // 5. (Stretch) I may try writing event listeners to allow the user to move the pieces by using their arrow keys.
     // 6. (Stretch) I may write code to keep track of the current score, high score, and win/loss count.
 
     // ### Endgame
