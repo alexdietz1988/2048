@@ -11,14 +11,14 @@ body {
 .gameboard {
     font-size: 0;
     width: 402px;
-    border: 1px solid black;
+    border: 0.5px solid black;
     position: relative;
     margin: 0 auto;
 }
 
 .square, .piece {
     display: inline-block;
-    border: 1px solid black;
+    border: 0.5px solid black;
     height: 100px;
     width: 100px;
 }
@@ -29,6 +29,7 @@ body {
     justify-content: center;
     align-items: center;
     transition: 0.3s;
+    color: white;
 
     position: absolute;
     top: 100px;
@@ -48,13 +49,13 @@ button {
     margin: 2.5px;
 }
 
-.v2 {background-color: gray}
-.v4 {background-color: yellow}
-.v8 {background-color: green}
-.v16 {background-color: orange}
-.v32 {background-color: red}
-.v64 {background-color: blue}
-.v128 {background-color: purple}
+.v2 {background-color:lightgray; color: black;}
+.v4 {background-color: beige; color: black;}
+.v8 {background-color: goldenrod}
+.v16 {background-color: darkorange;}
+.v32 {background-color:firebrick}
+.v64 {background-color:crimson}
+.v128, .v256, .v512, .v1024, .v2048 {background-color: yellow}
 .v256 {background-color: brown}
 .v512 {background-color: black}
 .v1024 {background-color: aqua;}
