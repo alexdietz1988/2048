@@ -1,16 +1,20 @@
 * {box-sizing: border-box;}
 
-h1, h3 {
-    text-align: center;
-}
-
 body {
     width: 600px;
 }
 
+header {
+    margin: 50px;
+}
+
+h1, h3 {
+    text-align: center;
+}
+
 .gameboard {
     font-size: 0;
-    width: 402px;
+    width: 401px;
     border: 0.5px solid black;
     position: relative;
     margin: 0 auto;
@@ -30,6 +34,7 @@ body {
     align-items: center;
     transition: 0.3s;
     color: white;
+    background-color: coral;
 
     position: absolute;
     top: 100px;
