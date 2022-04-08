@@ -16,7 +16,7 @@ body {
     margin: 0 auto;
 }
 
-.square {
+.square, .piece {
     display: inline-block;
     border: 1px solid black;
     height: 100px;
@@ -24,7 +24,6 @@ body {
 }
 
 .piece {
-    border: 1px solid black;
     font-size: 32px;
     display: flex;
     justify-content: center;

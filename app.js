@@ -20,7 +20,7 @@ function positionPiece(piece, row, column) {
     $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
 }
 
-function move (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
+function move(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     lookingForWhereToGo = false
     pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
     gameArray[newRow][newColumn] = gameArray[oldRow][oldColumn]
@@ -28,7 +28,7 @@ function move (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     positionPiece(pieceToMove, newRow, newColumn)
 }
 
-function combine (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
+function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     lookingForWhereToGo = false
 
     // Remove the existing piece
@@ -48,23 +48,20 @@ function combine (pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 }
 
 // TEST PIECES
-// let $testPiece = $('<div class="square piece" data-value="2" data-position="">2</div>')
- // $('.gameboard').prepend($testPiece)
-// positionPiece($testPiece, 1,1)
-// gameArray[1][1] = 2
+let $testPiece = $('<div class="piece v2 r0c0">2</div>')
+ $('.gameboard').prepend($testPiece)
+positionPiece($testPiece, 0,0)
+gameArray[0][0] = 2
 
-// let $testPiece2 = $('<div class="square piece" data-value="2" data-position=""">2</div>')
-// $('.gameboard').prepend($testPiece2)
-// positionPiece($testPiece2, 1,3)
-// gameArray[1][3] = 2
+let $testPiece2 = $('<div class="piece v2 r1c0">2</div>')
+$('.gameboard').prepend($testPiece2)
+positionPiece($testPiece2, 1,0)
+gameArray[1][0] = 2
 
-// let $testPiece3 = $('<div class="square piece" data-value="2" data-position="">2</div>')
+// let $testPiece3 = $('<div class="piece">2</div>')
 // $('.gameboard').prepend($testPiece3)
 // positionPiece($testPiece3, 1,1)
 // gameArray[1][1] = 2
-
-// let pieces = document.querySelectorAll(`[data-position="1,1"]`)
-// console.log(pieces)
 
 // FUNCTIONS TO MOVE IN EACH DIRECTION
 
@@ -159,11 +156,11 @@ function moveUp() {
 }
 
 function moveDown() {
-
     for (let c = 0; c < 4; c++) { // Look at each column
-        for (let r = 0; r < 3; r++) { // Look at the top three rows
+        for (let r = 3; r > -1; r--) { // Look at the top three rows
 
             if (gameArray[r][c] > 0) { // Find the lowermost piece that's potentially moveable
+                console.log(`looking at the piece at ${r}, ${c}`)
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 lookingForWhereToGo = true;
 
@@ -175,7 +172,8 @@ function moveDown() {
                     
                     // If you find a piece of the same value, combine them
                     } else if (gameArray[r + delta][c] === gameArray[r][c]) {
-                        combine(r, c, r + delta, c)
+                        console.log(`gonna try to combine with the piece at ${r + delta}, ${c}`)
+                        combine(pieceToMove, r, c, r + delta, c)
                     
                     // If you find a piece of a different value, or the end of the board, move next to it if possible
                     } else if ((gameArray[r + delta][c] > 0) && delta > 1) {
@@ -214,7 +212,7 @@ function randomOpenIndex() {
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece = $('<div class="square piece v2" display=none>2</div>').css('display', 'none')
+    let $newPiece = $('<div class="piece v2" display=none>2</div>').css('display', 'none')
     let position = randomOpenIndex()
     let row = position[0]
     let column = position[1]
@@ -228,7 +226,7 @@ function newPiece() {
     })
 }
 
-newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+// newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
 // LATER
     // 5. (Stretch) I may try writing event listeners to allow the user to move the pieces by using their arrow keys.
