@@ -11,10 +11,12 @@ let gameArray = [
 ]
 
 document.addEventListener('keydown', (e) => {
-    if (e.code === 'ArrowLeft') moveLeft()
-    else if (e.code === 'ArrowRight') moveRight()
-    else if (e.code === 'ArrowUp') moveUp()
-    else if (e.code === 'ArrowDown') moveDown()
+    if (gameActive) {
+        if (e.code === 'ArrowLeft') moveLeft()
+        else if (e.code === 'ArrowRight') moveRight()
+        else if (e.code === 'ArrowUp') moveUp()
+        else if (e.code === 'ArrowDown') moveDown()
+    }
 })
 
 // GENERAL-PURPOSE FUNCTIONS
@@ -285,10 +287,16 @@ function checkScore() {
 }
 
 function youWin() {
-    gameActive = false;
+    endgame()
+    $('.message').text('You win!')
 }
 
 function youLose() {
+    endgame()
+    $('.message').text('You lose!')
+}
+
+function endgame() {
     gameActive = false
 }
 
