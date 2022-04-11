@@ -10,12 +10,14 @@ let currentScore = 0;
 let highScore = 0;
 
 // Array representing the values at each square
-let gameArray = [
+let emptyGameArray = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
 ]
+
+let gameArray = emptyGameArray;
 
 document.addEventListener('keydown', (e) => {
     if (gameActive === false && noWinFound === false) keepPlaying()
@@ -112,8 +114,9 @@ function moveRight() {
                         if (delta > 1 && gameArray[r][3] === 0) move(pieceToMove, r, c, r, c + delta - 1)
                     
                     // If you find a piece of the same value, combine them
-                    } else if (gameArray[r][c + delta] === gameArray[r][c] && $(`.r${r}c${c - delta}`).hasClass('combinable')) { 
-                        combine(pieceToMove, r, c, r, c + delta)
+                    } else if (gameArray[r][c + delta] === gameArray[r][c]
+                        && $(`.r${r}c${c + delta}`).hasClass('combinable')) { 
+                            combine(pieceToMove, r, c, r, c + delta)
                     
                     // If you find a piece of a different value, move next to it if possible, otherwise stop looking
                     } else if (gameArray[r][c + delta] > 0) {
@@ -144,8 +147,9 @@ function moveUp() {
                         }
                     
                     // If you find a piece of the same value, combine them
-                    } else if (gameArray[r - delta][c] === gameArray[r][c] && $(`.r${r - delta}c${c}`).hasClass('combinable')) {
-                        combine(pieceToMove, r, c, r - delta, c)
+                    } else if (gameArray[r - delta][c] === gameArray[r][c]
+                        && $(`.r${r - delta}c${c}`).hasClass('combinable')) {
+                            combine(pieceToMove, r, c, r - delta, c)
                     
                     // If you find a piece of a different value, move next to it if possible, otherwise stop looking
                     } else if (gameArray[r - delta][c] > 0) {
@@ -236,32 +240,29 @@ function newPiece() {
 
 // newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
-// TEST PIECES
-// let $testPiece0 = $('<div class="piece v4 r1c0 combinable">4</div>')
-// $('.gameboard').prepend($testPiece3)
-// $testPiece3.css( {'top': `${1 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
-// gameArray[1][0] = 4
-
-// let $testPiece4 = $('<div class="piece v2 r2c0 combinable">2</div>')
-// $('.gameboard').prepend($testPiece4)
-// $testPiece4.css( {'top': `${2 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
-// gameArray[2][0] = 2
-
-// let $testPiece5 = $('<div class="piece v2 r3c0 combinable">2</div>')
-// $('.gameboard').prepend($testPiece5)
-// $testPiece5.css( {'top': `${3 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
-// gameArray[3][0] = 2
-
-function simulate(arr) {
+function simulateEndgame() {
     $('.piece').remove();
     gameActive = true
+    initialGame = true
+    noWinFound = true
+    currentScore = 0
     $('.message').html('Use the arrow keys to move the tiles,<br />combine them to get to 2048!')
-    $('.currentScore').text('0')
+    $('.currentScore').text(`${currentScore}`)
 
     let $testPiece;
 
+    let arr = [
+        [2,16,128,8],
+        [8,32,256,16],
+        [16,1024,0,1024],
+        [4,128,8,32],
+    ]
+
+    gameArray = arr
+
     for (let r = 0; r < arr.length; r++) {
         for (let c = 0; c < arr[r].length; c++) {
+            
             if (arr[r][c] > 0) {
                 $testPiece = $(`<div class="piece v${arr[r][c]} r${r}c${c} combinable">${arr[r][c]}</div>`)
                     .css( {'top': `${r * 100}px`, 'left': `${c * 100}px`})
@@ -269,46 +270,26 @@ function simulate(arr) {
             }
         }
     }
-    gameArray = arr
 }
-
-let simulateLoss = [
-    [2,16,128,8],
-    [8,32,0,16],
-    [16,2,256,1024],
-    [4,128,8,32],
-]
-
-let testArray = [
-    [0,0,0,0],
-    [4,0,0,0],
-    [2,0,0,0],
-    [4,0,0,0]
-]
-
-$('.simulateLoss').on('click', () => simulate(simulateLoss))
-
-// simulate(testArray)
 
 // ENDGAME
 $('.reset').on('click', reset)
+$('.simulateEndgame').on('click', simulateEndgame)
 
 function reset() {
-    $('.piece').remove();
-    gameArray = [
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0],
-    ]
+    $('.piece').remove()
+    gameArray = emptyGameArray
     gameActive = true
-    newPiece(); newPiece();
+    initialGame = true
+    noWinFound = true
+    currentScore = 0
     $('.message').html('Use the arrow keys to move the tiles,<br />combine them to get to 2048!')
-    $('.currentScore').text('0')
+    $('.currentScore').text(`${currentScore}`)
+    newPiece(); newPiece();
+    console.table(gameArray)
 }
 
 function checkForWin() {
-
     for (let r = 0; r < 4 && noWinFound; r++) {
         for (let c = 0; c < 4 && noWinFound; c++) {
             if (gameArray[r][c] === 2048) {
@@ -339,8 +320,7 @@ function checkForLoss() {
 
 function youWin() {
     gameActive = false
-    $('.message').text('You win!')
-    $('.message').after('<h4>Keep playing as long as you like!</h4>')
+    $('.message').html('You win!<br /> Keep playing as long as you like!')
     wins++
     $('.winLossCount').text(`Wins: ${wins} | Losses: ${losses}`)
 }
