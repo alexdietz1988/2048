@@ -1,4 +1,4 @@
-// GENERAL-PURPOSE GAME OBJECTS
+// GLOBAL VARIABLES
 let lookingForWhereToGo;
 let gameActive = true;
 let initialGame = true;
@@ -27,17 +27,13 @@ document.addEventListener('keydown', (e) => {
 })
 
 // GENERAL-PURPOSE FUNCTIONS
-function positionPiece(piece, row, column) {
-    $(piece).css( {'top': `${row * 100}px`, 'left': `${column * 100}px`})
-}
-
 function move(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     lookingForWhereToGo = false;
     successfulMove = true;
     pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`);
     gameArray[newRow][newColumn] = gameArray[oldRow][oldColumn];
     gameArray[oldRow][oldColumn] = 0;
-    positionPiece(pieceToMove, newRow, newColumn);
+    $(pieceToMove).css( {'top': `${newRow * 100}px`, 'left': `${newColumn * 100}px`})
 }
 
 function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
@@ -50,7 +46,7 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 
     // Move the new piece
     pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
-    positionPiece(pieceToMove, newRow, newColumn)
+    $(pieceToMove).css( {'top': `${newRow * 100}px`, 'left': `${newColumn * 100}px`})
     gameArray[oldRow][oldColumn] = 0
 
     // Double value of remaining piece
@@ -71,7 +67,6 @@ function endMove() {
 }
 
 // FUNCTIONS TO MOVE IN EACH DIRECTION
-
 function moveLeft() {
     for (let r = 0; r < 4; r++) { // Look at each row
         for (let c = 1; c < 4; c++) { // Look at the latter three columns
@@ -221,20 +216,15 @@ function randomOpenIndex() {
 
 // Generate a new piece at a random open square
 function newPiece() {
-    let $newPiece;
     let value;
-    
     if (Math.random() < 0.2) value = 4
     else value = 2
-    
-    $newPiece = $(`<div class="piece v${value}" display=none>${value}</div>`).css('display', 'none')
-
     let position = randomOpenIndex()
     let row = position[0]
     let column = position[1]
 
-    positionPiece($newPiece[0], row, column)
-    $newPiece.addClass(`r${row}c${column}`)
+    let $newPiece = $(`<div class="piece v${value} r${row}c${column}" display=none>${value}</div>`)
+        .css({'top': `${row * 100}px`, 'left': `${column * 100}px`})
     gameArray[row][column] = value
 
     $('.gameboard').prepend($newPiece)
