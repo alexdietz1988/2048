@@ -23,6 +23,7 @@ document.addEventListener('keydown', (e) => {
     else if (e.code === 'ArrowRight') moveRight()
     else if (e.code === 'ArrowUp') moveUp()
     else if (e.code === 'ArrowDown') moveDown()
+    endMove()
 })
 
 // GENERAL-PURPOSE FUNCTIONS
@@ -63,10 +64,15 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     $('.scoreDisplay').text(`Current Score: ${currentScore} | High Score: ${highScore}`)
 }
 
+function endMove() {
+    if (initialGame) checkScore()
+    if (gameActive && successfulMove) newPiece()
+    successfulMove = false
+}
+
 // FUNCTIONS TO MOVE IN EACH DIRECTION
 
 function moveLeft() {
-
     for (let r = 0; r < 4; r++) { // Look at each row
         for (let c = 1; c < 4; c++) { // Look at the latter three columns
 
@@ -96,13 +102,9 @@ function moveLeft() {
             }
         }
     }
-    if (initialGame) checkScore()
-    if (gameActive && successfulMove) newPiece()
-    successfulMove = false
 }
 
 function moveRight() {
-
     for (let r = 0; r < 4; r++) { // Look at each row
         for (let c = 2; c > -1; c--) { // Look at the first three columns, starting from the right
 
@@ -130,13 +132,9 @@ function moveRight() {
             }
         }
     }
-    if (initialGame) checkScore()
-    if (gameActive && successfulMove) newPiece()
-    successfulMove = false
 }
 
 function moveUp() {
-
     for (let c = 0; c < 4; c++) { // Look at each column
         for (let r = 1; r < 4; r++) { // Look at the bottom three rows
 
@@ -166,9 +164,6 @@ function moveUp() {
             }
         }
     }
-    if (initialGame) checkScore()
-    if (gameActive && successfulMove) newPiece()
-    successfulMove = false
 }
 
 function moveDown() {
@@ -199,9 +194,6 @@ function moveDown() {
             }
         }
     }
-    if (initialGame) checkScore()
-    if (gameActive && successfulMove) newPiece()
-    successfulMove = false
 }
 
 // NEW PIECE
