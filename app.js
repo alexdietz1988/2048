@@ -3,6 +3,7 @@ let lookingForWhereToGo;
 let gameActive = true;
 let initialGame = true;
 let successfulMove = false;
+let noWinFound = true;
 let wins = 0;
 let losses = 0;
 let currentScore = 0;
@@ -17,7 +18,7 @@ let gameArray = [
 ]
 
 document.addEventListener('keydown', (e) => {
-    if (gameActive === false) keepPlaying()
+    if (gameActive === false && noWinFound === false) keepPlaying()
 
     if (e.code === 'ArrowLeft') moveLeft()
     else if (e.code === 'ArrowRight') moveRight()
@@ -252,6 +253,11 @@ function newPiece() {
 // gameArray[3][0] = 2
 
 function simulate(arr) {
+    $('.piece').remove();
+    gameActive = true
+    $('.message').html('Use the arrow keys to move the tiles,<br />combine them to get to 2048!')
+    $('.currentScore').text('0')
+
     let $testPiece;
 
     for (let r = 0; r < arr.length; r++) {
@@ -270,10 +276,8 @@ let simulateLoss = [
     [2,16,128,8],
     [8,32,0,16],
     [16,2,256,1024],
-    [4,128,4,2],
+    [4,128,8,32],
 ]
-
-// simulate(simulateLoss)
 
 let testArray = [
     [0,0,0,0],
@@ -281,6 +285,8 @@ let testArray = [
     [2,0,0,0],
     [4,0,0,0]
 ]
+
+$('.simulateLoss').on('click', () => simulate(simulateLoss))
 
 // simulate(testArray)
 
@@ -302,7 +308,6 @@ function reset() {
 }
 
 function checkForWin() {
-    let noWinFound = true
 
     for (let r = 0; r < 4 && noWinFound; r++) {
         for (let c = 0; c < 4 && noWinFound; c++) {
