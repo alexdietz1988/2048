@@ -34,7 +34,7 @@ h1, h3 {
     align-items: center;
     transition: 0.3s;
     color: black;
-    background-color: yellow;
+    background-color: #F6F740;
 
     position: absolute;
     top: 100px;
@@ -56,8 +56,9 @@ button {
 }
 
 .v2 {background-color:lightgray; color: black;}
-.v4 {background-color: beige; color: black;}
-.v8 {background-color: goldenrod; color: white;}
-.v16 {background-color: darkorange; color: white;}
-.v32 {background-color:firebrick; color: white;}
-.v64 {background-color:crimson; color: white;}
+.v4 {background-color: #D8DC6A; color: black;}
+.v8 {background-color: #6689A1; color: white;}
+.v16 {background-color: #995D81; color: white;}
+.v32 {background-color:#EB8258; color: white;}
+.v64 {background-color:#A53860; color: white;}
+/* Colors selected using coolors.co */

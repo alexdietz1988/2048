@@ -50,7 +50,7 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     // Move the new piece
     pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
     positionPiece(pieceToMove, newRow, newColumn)
-    gameArray[oldRow][oldColumn] = 0 // Update the gameArray to reflect that the piece has moved
+    gameArray[oldRow][oldColumn] = 0
 
     // Double value of remaining piece
     let newValue = gameArray[newRow][newColumn] * 2
