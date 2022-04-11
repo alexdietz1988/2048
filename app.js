@@ -48,7 +48,8 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 
     currentScore += newValue
     if (currentScore > highScore) highScore = currentScore
-    $('.scoreDisplay').text(`Current Score: ${currentScore} | High Score: ${highScore}`)
+    $('.currentScore').text(`${currentScore}`)
+    $('.highScore').text(`${highScore}`)
 }
 
 function endMove() {
@@ -266,6 +267,7 @@ function reset() {
     gameActive = true
     newPiece(); newPiece();
     $('.message').html('Use the arrow keys to move the tiles,<br />combine them to get to 2048!')
+    $('.currentScore').text('0')
 }
 
 function checkScore() {
