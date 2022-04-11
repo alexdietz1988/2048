@@ -84,11 +84,11 @@ function moveLeft() {
                     } else if (gameArray[r][c - delta] === gameArray[r][c] && $(`.r${r}c${c - delta}`).hasClass('combinable')) {
                         combine(pieceToMove, r, c, r, c - delta)
                     
-                    // If you find a piece of a different value, move next to it if possible
+                    // If you find a piece of a different value, move next to it if possible, otherwise stop looking
                     } else if (gameArray[r][c - delta] > 0) {
                         if (delta > 1 && gameArray[r][c - delta + 1] === 0) {
                             move(pieceToMove, r, c, r, c - delta + 1)
-                        }
+                        } else lookingForWhereToGo = false
                     }
                 }
             }
@@ -114,11 +114,11 @@ function moveRight() {
                     } else if (gameArray[r][c + delta] === gameArray[r][c] && $(`.r${r}c${c - delta}`).hasClass('combinable')) { 
                         combine(pieceToMove, r, c, r, c + delta)
                     
-                    // If you find a piece of a different value, move next to it if possible
+                    // If you find a piece of a different value, move next to it if possible, otherwise stop looking
                     } else if (gameArray[r][c + delta] > 0) {
                         if (delta > 1 && gameArray[r][c + delta - 1] === 0) {
                             move(pieceToMove, r, c, r, c + delta - 1)
-                        }
+                        } else lookingForWhereToGo = false
                     }
                 }   
             }
@@ -134,7 +134,7 @@ function moveUp() {
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 lookingForWhereToGo = true;
 
-                for (let delta = 1; r - delta > -2 && lookingForWhereToGo; delta++) {
+                for (let delta = 1; r - delta > -2 && lookingForWhereToGo; delta++) { // Start looking above it...
 
                     // If you find the end of the board, move next to it if possible
                     if (r - delta < 0) {
@@ -146,11 +146,11 @@ function moveUp() {
                     } else if (gameArray[r - delta][c] === gameArray[r][c] && $(`.r${r - delta}c${c}`).hasClass('combinable')) {
                         combine(pieceToMove, r, c, r - delta, c)
                     
-                    // If you find a piece of a different value, move next to it if possible
+                    // If you find a piece of a different value, move next to it if possible, otherwise stop looking
                     } else if (gameArray[r - delta][c] > 0) {
                         if (delta > 1 && gameArray[r - delta + 1][c] === 0) {
                             move(pieceToMove, r, c, r - delta + 1, c)
-                        }
+                        } else lookingForWhereToGo = false
                     }
                 }
             }
@@ -166,21 +166,24 @@ function moveDown() {
                 let pieceToMove = document.querySelector(`.r${r}c${c}`)
                 lookingForWhereToGo = true;
 
-                for (let delta = 1; r + delta < 5 && lookingForWhereToGo; delta++) {
+                for (let delta = 1; r + delta < 5 && lookingForWhereToGo; delta++) { // Start looking below it...
 
                     // If you find the end of the board, move next to it if possible
                     if (r + delta > 3) {
-                        if (delta > 1 && gameArray[3][c] === 0) move(pieceToMove, r, c, r + delta - 1, c)
+                        if (delta > 1 && gameArray[3][c] === 0) {
+                            move(pieceToMove, r, c, r + delta - 1, c)
+                        }
                     
-                    // If you find a piece of the same value, combine them
-                    } else if (gameArray[r + delta][c] === gameArray[r][c] && $(`.r${r + delta}c${c}`).hasClass('combinable')) {
-                        combine(pieceToMove, r, c, r + delta, c)
+                    // If you find a piece of the same value, combine them if possible
+                    } else if (gameArray[r + delta][c] === gameArray[r][c]
+                        && $(`.r${r + delta}c${c}`).hasClass('combinable')) {
+                            combine(pieceToMove, r, c, r + delta, c)
                     
-                    // If you find a piece of a different value, move next to it if possible
+                    // If you find a piece of a different value, move next to it if possible, otherwise stop looking 
                     } else if (gameArray[r + delta][c] > 0) {
                         if (delta > 1 && gameArray[r + delta - 1][c] === 0) {
                             move(pieceToMove, r, c, r + delta - 1, c)
-                        }
+                        } else lookingForWhereToGo = false
                     }
                 }
             }
@@ -248,7 +251,7 @@ function newPiece() {
 // $testPiece5.css( {'top': `${3 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
 // gameArray[3][0] = 2
 
-function testPieces(arr) {
+function simulate(arr) {
     let $testPiece;
 
     for (let r = 0; r < arr.length; r++) {
@@ -260,17 +263,26 @@ function testPieces(arr) {
             }
         }
     }
-    gameArray = testArray
+    gameArray = arr
 }
 
-let testArray = [
-    [2,16,2,8],
-    [8,32,0,2],
+let simulateLoss = [
+    [2,16,128,8],
+    [8,32,0,16],
     [16,2,256,1024],
-    [4,128,4,128],
+    [4,128,4,2],
 ]
 
-testPieces(testArray)
+// simulate(simulateLoss)
+
+let testArray = [
+    [0,0,0,0],
+    [4,0,0,0],
+    [2,0,0,0],
+    [4,0,0,0]
+]
+
+// simulate(testArray)
 
 // ENDGAME
 $('.reset').on('click', reset)
