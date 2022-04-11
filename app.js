@@ -54,9 +54,12 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 }
 
 function endMove() {
-    if (initialGame) checkScore()
+    if (initialGame) checkForWin()
     $('.piece').addClass('combinable')
-    if (gameActive && successfulMove) newPiece()
+    if (gameActive && successfulMove){
+        newPiece()
+        checkForLoss()
+    }
     successfulMove = false
 }
 
@@ -217,8 +220,8 @@ function newPiece() {
     let row = position[0]
     let column = position[1]
 
-    let $newPiece = $(`<div class="piece v${value} r${row}c${column} combinable" display=none>${value}</div>`)
-        .css({'top': `${row * 100}px`, 'left': `${column * 100}px`})
+    let $newPiece = $(`<div class="piece v${value} r${row}c${column} combinable">${value}</div>`)
+        .css({'top': `${row * 100}px`, 'left': `${column * 100}px`, 'display': 'none'})
     gameArray[row][column] = value
 
     $('.gameboard').prepend($newPiece)
@@ -230,29 +233,19 @@ function newPiece() {
 newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
 // TEST PIECES
-// let $testPiece = $('<div class="piece v1024 r3c0">1024</div>')
-//  $('.gameboard').prepend($testPiece)
-// positionPiece($testPiece, 3,0)
-// gameArray[3][0] = 1024
-
-// let $testPiece2 = $('<div class="piece v1024 r3c1">1024</div>')
-// $('.gameboard').prepend($testPiece2)
-// positionPiece($testPiece2, 3,1)
-// gameArray[3][1] = 1024
-
 // let $testPiece3 = $('<div class="piece v4 r1c0 combinable">4</div>')
 // $('.gameboard').prepend($testPiece3)
-// $testPiece3.css( {'top': `${1 * 100}px`, 'left': `${0 * 100}px`})
+// $testPiece3.css( {'top': `${1 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
 // gameArray[1][0] = 4
 
 // let $testPiece4 = $('<div class="piece v2 r2c0 combinable">2</div>')
 // $('.gameboard').prepend($testPiece4)
-// $testPiece4.css( {'top': `${2 * 100}px`, 'left': `${0 * 100}px`})
+// $testPiece4.css( {'top': `${2 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
 // gameArray[2][0] = 2
 
 // let $testPiece5 = $('<div class="piece v2 r3c0 combinable">2</div>')
 // $('.gameboard').prepend($testPiece5)
-// $testPiece5.css( {'top': `${3 * 100}px`, 'left': `${0 * 100}px`})
+// $testPiece5.css( {'top': `${3 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
 // gameArray[3][0] = 2
 
 // ENDGAME
@@ -272,7 +265,7 @@ function reset() {
     $('.currentScore').text('0')
 }
 
-function checkScore() {
+function checkForWin() {
     let noWinFound = true
 
     for (let r = 0; r < 4 && noWinFound; r++) {
@@ -283,7 +276,6 @@ function checkScore() {
             }
         }
     }
-    if (noWinFound) checkForLoss()
 }
 
 function checkForLoss() {
