@@ -230,10 +230,10 @@ function newPiece() {
     })
 }
 
-newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
+// newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 
 // TEST PIECES
-// let $testPiece3 = $('<div class="piece v4 r1c0 combinable">4</div>')
+// let $testPiece0 = $('<div class="piece v4 r1c0 combinable">4</div>')
 // $('.gameboard').prepend($testPiece3)
 // $testPiece3.css( {'top': `${1 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
 // gameArray[1][0] = 4
@@ -247,6 +247,30 @@ newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 // $('.gameboard').prepend($testPiece5)
 // $testPiece5.css( {'top': `${3 * 100}px`, 'left': `${0 * 100}px`, 'display': 'none'})
 // gameArray[3][0] = 2
+
+function testPieces(arr) {
+    let $testPiece;
+
+    for (let r = 0; r < arr.length; r++) {
+        for (let c = 0; c < arr[r].length; c++) {
+            if (arr[r][c] > 0) {
+                $testPiece = $(`<div class="piece v${arr[r][c]} r${r}c${c} combinable">${arr[r][c]}</div>`)
+                    .css( {'top': `${r * 100}px`, 'left': `${c * 100}px`})
+                $('.gameboard').prepend($testPiece)
+            }
+        }
+    }
+    gameArray = testArray
+}
+
+let testArray = [
+    [2,16,2,8],
+    [8,32,0,2],
+    [16,2,256,1024],
+    [4,128,4,128],
+]
+
+testPieces(testArray)
 
 // ENDGAME
 $('.reset').on('click', reset)
@@ -309,6 +333,7 @@ function youLose() {
     $('.message').text('You lose!')
     losses++
     $('.winLossCount').text(`Wins: ${wins} | Losses: ${losses}`)
+    $('.piece').css('opacity', '0.3')
 }
 
 function keepPlaying() {
