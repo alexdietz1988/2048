@@ -8,7 +8,7 @@
 JavaScript, HTML, CSS, jQuery, Bootstrap
 
 # Getting started
-[Click here to play!](./index.html)
+[Click here to play!](https://alexdietz1988.github.io/2048/)
 
 # Next steps
 Future improvements might include:
