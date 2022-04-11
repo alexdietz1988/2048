@@ -2,10 +2,11 @@
 let lookingForWhereToGo;
 let gameActive = true;
 let initialGame = true;
+let successfulMove = false;
 let wins = 0;
 let losses = 0;
-let currentScore = 0
-let highScore = 0
+let currentScore = 0;
+let highScore = 0;
 
 // Array representing the values at each square
 let gameArray = [
@@ -30,15 +31,17 @@ function positionPiece(piece, row, column) {
 }
 
 function move(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
-    lookingForWhereToGo = false
-    pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
-    gameArray[newRow][newColumn] = gameArray[oldRow][oldColumn]
-    gameArray[oldRow][oldColumn] = 0
-    positionPiece(pieceToMove, newRow, newColumn)
+    lookingForWhereToGo = false;
+    successfulMove = true;
+    pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`);
+    gameArray[newRow][newColumn] = gameArray[oldRow][oldColumn];
+    gameArray[oldRow][oldColumn] = 0;
+    positionPiece(pieceToMove, newRow, newColumn);
 }
 
 function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     lookingForWhereToGo = false
+    successfulMove = true;
 
     // Remove the existing piece
     let existingPiece = document.querySelector(`.r${newRow}c${newColumn}`)
@@ -94,7 +97,8 @@ function moveLeft() {
         }
     }
     if (initialGame) checkScore()
-    if (gameActive) newPiece()
+    if (gameActive && successfulMove) newPiece()
+    successfulMove = false
 }
 
 function moveRight() {
@@ -127,7 +131,8 @@ function moveRight() {
         }
     }
     if (initialGame) checkScore()
-    if (gameActive) newPiece()
+    if (gameActive && successfulMove) newPiece()
+    successfulMove = false
 }
 
 function moveUp() {
@@ -162,7 +167,8 @@ function moveUp() {
         }
     }
     if (initialGame) checkScore()
-    if (gameActive) newPiece()
+    if (gameActive && successfulMove) newPiece()
+    successfulMove = false
 }
 
 function moveDown() {
@@ -194,7 +200,8 @@ function moveDown() {
         }
     }
     if (initialGame) checkScore()
-    if (gameActive) newPiece()
+    if (gameActive && successfulMove) newPiece()
+    successfulMove = false
 }
 
 // NEW PIECE
