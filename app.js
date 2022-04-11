@@ -36,20 +36,11 @@ function move(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     $(pieceToMove).css( {'top': `${newRow * 100}px`, 'left': `${newColumn * 100}px`})
 }
 
-function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
-    lookingForWhereToGo = false
-    successfulMove = true;
-
-    // Remove the existing piece
-    let existingPiece = document.querySelector(`.r${newRow}c${newColumn}`)
-    existingPiece.remove()
-
-    // Move the new piece
-    pieceToMove.classList.replace(`r${oldRow}c${oldColumn}`, `r${newRow}c${newColumn}`)
-    $(pieceToMove).css( {'top': `${newRow * 100}px`, 'left': `${newColumn * 100}px`})
-    gameArray[oldRow][oldColumn] = 0
-
-    // Double value of remaining piece
+function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {    
+    $(`.r${newRow}c${newColumn}`).remove() // Remove the existing piece
+    
+    // Move the new piece, then double its value
+    move(pieceToMove, oldRow, oldColumn, newRow, newColumn)
     let newValue = gameArray[newRow][newColumn] * 2
     pieceToMove.classList.replace(`v${newValue / 2}`, `v${newValue}`)
     $(pieceToMove).text(newValue)
@@ -246,10 +237,20 @@ newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 // positionPiece($testPiece2, 3,1)
 // gameArray[3][1] = 1024
 
-// let $testPiece3 = $('<div class="piece v2 r3c2">2</div>')
+// let $testPiece3 = $('<div class="piece v2 r1c0">2</div>')
 // $('.gameboard').prepend($testPiece3)
-// positionPiece($testPiece3, 3,2)
-// gameArray[3][2] = 2
+// $testPiece3.css( {'top': `${1 * 100}px`, 'left': `${0 * 100}px`})
+// gameArray[1][0] = 2
+
+// let $testPiece4 = $('<div class="piece v2 r3c0">2</div>')
+// $('.gameboard').prepend($testPiece4)
+// $testPiece4.css( {'top': `${3 * 100}px`, 'left': `${0 * 100}px`})
+// gameArray[3][0] = 2
+
+// let $testPiece5 = $('<div class="piece v2 r3c3">2</div>')
+// $('.gameboard').prepend($testPiece5)
+// $testPiece5.css( {'top': `${3 * 100}px`, 'left': `${3 * 100}px`})
+// gameArray[3][3] = 2
 
 // ENDGAME
 $('.reset').on('click', reset)
