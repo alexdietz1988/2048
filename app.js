@@ -43,6 +43,7 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
     move(pieceToMove, oldRow, oldColumn, newRow, newColumn)
     let newValue = gameArray[newRow][newColumn] * 2
     pieceToMove.classList.replace(`v${newValue / 2}`, `v${newValue}`)
+    $(pieceToMove).removeClass('combinable')
     $(pieceToMove).text(newValue)
     gameArray[newRow][newColumn] = newValue
 
@@ -54,6 +55,7 @@ function combine(pieceToMove, oldRow, oldColumn, newRow, newColumn) {
 
 function endMove() {
     if (initialGame) checkScore()
+    $('.piece').addClass('combinable')
     if (gameActive && successfulMove) newPiece()
     successfulMove = false
 }
@@ -76,7 +78,7 @@ function moveLeft() {
                         }
                     
                     // If you find a piece of the same value, combine them
-                    } else if (gameArray[r][c - delta] === gameArray[r][c]) {
+                    } else if (gameArray[r][c - delta] === gameArray[r][c] && $(`.r${r}c${c - delta}`).hasClass('combinable')) {
                         combine(pieceToMove, r, c, r, c - delta)
                     
                     // If you find a piece of a different value, move next to it if possible
@@ -106,7 +108,7 @@ function moveRight() {
                         if (delta > 1 && gameArray[r][3] === 0) move(pieceToMove, r, c, r, c + delta - 1)
                     
                     // If you find a piece of the same value, combine them
-                    } else if (gameArray[r][c + delta] === gameArray[r][c]) { 
+                    } else if (gameArray[r][c + delta] === gameArray[r][c] && $(`.r${r}c${c - delta}`).hasClass('combinable')) { 
                         combine(pieceToMove, r, c, r, c + delta)
                     
                     // If you find a piece of a different value, move next to it if possible
@@ -138,7 +140,7 @@ function moveUp() {
                         }
                     
                     // If you find a piece of the same value, combine them
-                    } else if (gameArray[r - delta][c] === gameArray[r][c]) {
+                    } else if (gameArray[r - delta][c] === gameArray[r][c] && $(`.r${r - delta}c${c}`).hasClass('combinable')) {
                         combine(pieceToMove, r, c, r - delta, c)
                     
                     // If you find a piece of a different value, move next to it if possible
@@ -168,7 +170,7 @@ function moveDown() {
                         if (delta > 1 && gameArray[3][c] === 0) move(pieceToMove, r, c, r + delta - 1, c)
                     
                     // If you find a piece of the same value, combine them
-                    } else if (gameArray[r + delta][c] === gameArray[r][c]) {
+                    } else if (gameArray[r + delta][c] === gameArray[r][c] && $(`.r${r + delta}c${c}`).hasClass('combinable')) {
                         combine(pieceToMove, r, c, r + delta, c)
                     
                     // If you find a piece of a different value, move next to it if possible
@@ -215,7 +217,7 @@ function newPiece() {
     let row = position[0]
     let column = position[1]
 
-    let $newPiece = $(`<div class="piece v${value} r${row}c${column}" display=none>${value}</div>`)
+    let $newPiece = $(`<div class="piece v${value} r${row}c${column} combinable" display=none>${value}</div>`)
         .css({'top': `${row * 100}px`, 'left': `${column * 100}px`})
     gameArray[row][column] = value
 
@@ -238,20 +240,20 @@ newPiece(); newPiece() // Call newPiece() twice to generate the first two pieces
 // positionPiece($testPiece2, 3,1)
 // gameArray[3][1] = 1024
 
-// let $testPiece3 = $('<div class="piece v2 r1c0">2</div>')
+// let $testPiece3 = $('<div class="piece v4 r1c0 combinable">4</div>')
 // $('.gameboard').prepend($testPiece3)
 // $testPiece3.css( {'top': `${1 * 100}px`, 'left': `${0 * 100}px`})
-// gameArray[1][0] = 2
+// gameArray[1][0] = 4
 
-// let $testPiece4 = $('<div class="piece v2 r3c0">2</div>')
+// let $testPiece4 = $('<div class="piece v2 r2c0 combinable">2</div>')
 // $('.gameboard').prepend($testPiece4)
-// $testPiece4.css( {'top': `${3 * 100}px`, 'left': `${0 * 100}px`})
-// gameArray[3][0] = 2
+// $testPiece4.css( {'top': `${2 * 100}px`, 'left': `${0 * 100}px`})
+// gameArray[2][0] = 2
 
-// let $testPiece5 = $('<div class="piece v2 r3c3">2</div>')
+// let $testPiece5 = $('<div class="piece v2 r3c0 combinable">2</div>')
 // $('.gameboard').prepend($testPiece5)
-// $testPiece5.css( {'top': `${3 * 100}px`, 'left': `${3 * 100}px`})
-// gameArray[3][3] = 2
+// $testPiece5.css( {'top': `${3 * 100}px`, 'left': `${0 * 100}px`})
+// gameArray[3][0] = 2
 
 // ENDGAME
 $('.reset').on('click', reset)
