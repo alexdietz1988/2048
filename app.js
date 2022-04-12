@@ -23,7 +23,8 @@ document.addEventListener('keydown', (e) => {
     endMove()
 })
 $('.reset').click(reset)
-$('.simulateEndgame').click(simulateEndgame)
+$('.simulateLoss').click(simulateLoss)
+$('.simulateWin').click(simulateWin)
 
 // GENERAL-PURPOSE FUNCTIONS
 // Find a random open index on gameArray
@@ -308,7 +309,7 @@ function youLose() {
     $('.piece').css('opacity', '0.3')
 }
 
-function simulateEndgame() {
+function simulateLoss() {
     $('.piece').remove();
     initialGame = true
     noWinFound = true
@@ -321,8 +322,39 @@ function simulateEndgame() {
     let arr = [
         [2,16,128,8],
         [8,32,256,16],
-        [16,1024,0,1024],
+        [16,4,0,512],
         [4,128,8,32],
+    ]
+
+    gameArray = arr
+
+    for (let r = 0; r < arr.length; r++) {
+        for (let c = 0; c < arr[r].length; c++) {
+            
+            if (arr[r][c] > 0) {
+                $testPiece = $(`<div class="piece v${arr[r][c]} r${r}c${c} combinable">${arr[r][c]}</div>`)
+                    .css( {'top': `${r * 100}px`, 'left': `${c * 100}px`})
+                $('.gameboard').prepend($testPiece)
+            }
+        }
+    }
+}
+
+function simulateWin() {
+    $('.piece').remove();
+    initialGame = true
+    noWinFound = true
+    currentScore = 0
+    $('.message').html('Use the arrow keys to move the tiles,<br />combine them to get to 2048!')
+    $('.currentScore').text(`${currentScore}`)
+
+    let $testPiece;
+
+    let arr = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,1024,0,1024],
+        [0,0,0,0],
     ]
 
     gameArray = arr
