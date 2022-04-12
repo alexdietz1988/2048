@@ -11,6 +11,7 @@ JavaScript, HTML, CSS, jQuery, Bootstrap
 [Click here to play!](https://alexdietz1988.github.io/2048/)
 
 # Next steps
-Future improvements might include:
-* Adding an animation when two tiles combine
-* Adding a slight delay before a new tile becomes visible
+Possible future improvments:
+* Add an animation when two tiles combine
+* Add a slight delay before a new tile becomes visible
+* When a player wins, temporarily overlay "you win" message over the gameboard
